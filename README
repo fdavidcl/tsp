@@ -1,0 +1,15 @@
+
+
+************************************************
+*                                              *
+*  TSP: El problema del viajante de comercio   *
+*                                              *
+*  Metodología de la programación - 1º DGIIM   *
+*                                              *
+************************************************
+
+Para ejecutar el programa, puede utilizar el ejecutable ubicado
+en ./bin/tsp o bien, para obtener un gráfico generado por
+Gnuplot, ejecute ./plot.sh <RUTA_PROBLEMA>
+
+
