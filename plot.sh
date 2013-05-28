@@ -1,3 +1,4 @@
+# Oscar Bermudez y F. David Charte
 #!/bin/bash
 # Titulo: plot.sh
 # Descripcion: Facilita la generacion de un grafico con la solucion
