@@ -34,6 +34,7 @@ class Heuristica {
     * @return Objeto de Recorrido que se ha construido
     */ 
    Recorrido vecino_mas_cercano_desde(int indice);
+
 public:
    /**
     * Este metodo toma el objeto de la clase Problema y devuelve la
@@ -42,6 +43,8 @@ public:
     * @return Recorrido que soluciona el problema
     */
    Recorrido soluciona(Problema& a_resolver);
+
+   Recorrido soluciona_con_insercion(Problema &a_resolver);
 };
 
 #endif
