@@ -68,6 +68,8 @@ public:
    
    Recorrido& insertar(Ciudad* nueva, int indice);
    
+   Recorrido& intercambiar(int, int);
+   
    /**
     * Metodo que devuelve un puntero a un objeto de
     * la clase Ciudad segun el indice dado. No permite la
