@@ -10,6 +10,7 @@
 #define HEURISTICA
 #include "Recorrido.h"
 #include "Problema.h"
+#include "Aleatorio.h"
 
 /**
  * ### Clase Heuristica
@@ -33,7 +34,10 @@ class Heuristica {
     * @param indice Indice de la ciudad de inicio
     * @return Objeto de Recorrido que se ha construido
     */ 
-   //Recorrido vecino_mas_cercano_desde(int indice);
+    
+   
+   Recorrido& genera_recorrido_aleatorio(Problema&);
+   //Recorrido genera_mutacion(Recorrido& actual);
 public:
    /**
     * Este metodo toma el objeto de la clase Problema y devuelve la
