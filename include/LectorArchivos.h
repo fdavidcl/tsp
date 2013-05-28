@@ -22,6 +22,15 @@ using namespace std;
  * un archivo y proporcionar un objeto de la clase Problema
  */
 class LectorArchivos {
+   /**
+    * Array de punteros a objetos de Ciudad
+    */
+   Ciudad** conjunto_ciudades;
+   
+   /**
+    * Cantidad de ciudades
+    */
+   int num_ciudades;
 public:
    /**
     * Metodo que crea un objeto de la clase Problema a partir de los
@@ -38,6 +47,11 @@ public:
     * @return Validez del archivo
     */
    bool comprueba_existencia(char* nombre);
+   
+   /**
+    * Destructor para la clase LectorArchivos
+    */
+   ~LectorArchivos();
 };
 
 #endif

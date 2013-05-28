@@ -25,13 +25,13 @@ class Problema {
    /**
     * Lista de punteros a objetos de la clase Ciudad
     */
-   Ciudad ** mapa;
+   Ciudad** mapa;
    
    /**
     * Matriz triangular inferior que contiene las distancias entre
     * los diferentes objetos de la clase Ciudad
     */
-   double ** distancias;
+   double** distancias;
    
 public:
    /**
@@ -63,7 +63,12 @@ public:
     * @param indice Indice de la ciudad pedida
     * @return Puntero al objeto de Ciudad correspondiente
     */
-   Ciudad * obten_ciudad(int indice);
+   Ciudad* operator[](int indice);
+   
+   /**
+    * Destructor de la clase Problema
+    */
+   ~Problema();
 };
 
 #endif

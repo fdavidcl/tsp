@@ -30,23 +30,19 @@ int main(int argc, char *argv[]){
 	      
 	      // Creamos un objeto de Recorrido a partir de la solucion
 	      // que proporcione el objeto de Heuristica
-	      Recorrido solucion(estrategia.soluciona(&instancia));
+	      Recorrido solucion(estrategia.soluciona(instancia));
 	      
 	      int num_ciudades = solucion.consulta_cantidad();
 	      
 	      // Mostramos por salida el camino y el coste asociado
-	      cout << "# " << endl;
+	      cout << "# TSP: El problema del viajante de comercio" << endl;
 	      cout << "# Utilice plot.sh para generar un grafico con la solucion" << endl << "# Recorrido:" << endl;
-	      
-	      for (int i = 0; i < num_ciudades; i++) {
-	         cout << solucion.obten_ciudad(i)->consulta_x() << "  " << solucion.obten_ciudad(i)->consulta_y() << endl;
-	      }
-	      
+	      cout << solucion << endl;
 	      cout << "# Coste del recorrido: " << solucion.calcula_coste() << endl;
 	   }
 	   else {
 	      cout << argv[0] << ": El archivo " << argv[1] << " no existe. Saliendo." << endl;
-	      exit(2);
+	      exit(3);
 	   }
 	}
 	else {

@@ -8,6 +8,7 @@
  */
 #ifndef RECORRIDO
 #define RECORRIDO
+#include <ostream>
 #include "Ciudad.h"
 
 /**
@@ -22,7 +23,7 @@ class Recorrido {
     * Dato miembro que almacena una lista de punteros
     * a objetos de Ciudad
     */
-   Ciudad **camino;
+   Ciudad** camino;
    
    /**
     * Contiene la cantidad actual de objetos de la
@@ -43,19 +44,38 @@ public:
    Recorrido();
    
    /**
-    * Este metodo agrega un nuevo puntero a un objeto
-    * de la clase Ciudad al camino 
-    * @param *nueva Puntero a Ciudad
+    * Sobrecarga del operador + que permite agregar una nueva
+    * Ciudad al Recorrido actual, devolviendo una referencia
+    * al nuevo Recorrido (sin modificar el actual)
+    * @param nueva Ciudad a agregar
+    * @return Referencia al Recorrido resultado
     */
-   void agrega(Ciudad *nueva);
+   Recorrido& operator+(Ciudad* nueva) const;
+   
+   /**
+    * Sobrecarga del operador = que permite asignar un Recorrido
+    * al actual
+    * @param a_asignar Recorrido a asignar
+    */
+   Recorrido& operator=(Recorrido& a_asignar);
+   
+   /**
+    * Sobrecarga del operador += que permite agregar una nueva
+    * Ciudad al Recorrido actual modificando el actual
+    * @param nueva Ciudad a agregar
+    */
+   Recorrido& operator+=(Ciudad* nueva);
+   
+   Recorrido& insertar(Ciudad* nueva, int indice);
    
    /**
     * Metodo que devuelve un puntero a un objeto de
-    * la clase Ciudad segun el indice dado
+    * la clase Ciudad segun el indice dado. No permite la
+    * modificacion del recorrido de esta forma.
     * @param indice Posicion de la ciudad a devolver
     * @return Puntero a la Ciudad correspondiente
     */
-   Ciudad * obten_ciudad(int indice);
+   Ciudad* operator[](int indice) const;
    
    /**
     * Informa de la cantidad de ciudades almacenadas
@@ -68,6 +88,22 @@ public:
     * @return Distancia recorrida
     */
    double calcula_coste();
+   
+   /**
+    * Sobrecarga del operador << que permite la salida por 
+    * pantalla de las coordenadas del Recorrido, de forma
+    * sencilla.
+    ********
+    * Declarada funcion amiga de la clase para proporcionar
+    * acceso a los datos miembro
+    */
+   friend std::ostream& operator<<(std::ostream& output, const Recorrido& a_mostrar); 
+   
+   /**
+    * Destructor de la clase Recorrido
+    */
+   ~Recorrido();
 };
+
 
 #endif

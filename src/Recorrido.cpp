@@ -9,29 +9,74 @@ Recorrido::Recorrido()
    camino = 0;
 }
 
-void Recorrido::agrega(Ciudad *nueva) {
+Recorrido& Recorrido::operator+(Ciudad *nueva) const {
    // Creamos el array de punteros que contenga
    // punteros a todas las ciudades almacenadas
-   Ciudad** nuevo_camino = new Ciudad *[cantidad + 1];
+   Recorrido* devuelto = new Recorrido;
+   devuelto->camino = new Ciudad* [cantidad + 1];
    
    for (int i = 0; i < cantidad; i++)
+      devuelto->camino[i] = camino[i];
+   
+   devuelto->camino[cantidad] = nueva;
+   
+   // Anotamos lo que aumenta el coste del recorrido
+   // al agregar la ciudad
+   if (cantidad > 1)
+      devuelto->distancia_recorrida = distancia_recorrida + nueva->calcula_distancia_con( camino[cantidad - 1] );
+   
+   devuelto->cantidad = cantidad + 1;
+   
+   return *devuelto;
+}
+
+Recorrido& Recorrido::operator=(Recorrido& a_asignar) {
+   Ciudad** nuevo_camino = new Ciudad* [a_asignar.cantidad];
+   
+   for (int i = 0; i < a_asignar.cantidad; i++) {
+      nuevo_camino[i] = a_asignar[i];
+   }
+   
+   delete[] camino;
+   camino = nuevo_camino;
+   
+   distancia_recorrida = a_asignar.distancia_recorrida;
+   cantidad = a_asignar.cantidad;
+   
+   return *this;
+}
+
+Recorrido& Recorrido::operator+=(Ciudad *nueva) {
+   return insertar(nueva, cantidad);
+}
+
+Recorrido& Recorrido::insertar(Ciudad *nueva, int indice) {
+   indice > cantidad ? indice = cantidad : 0;
+   
+   Ciudad** nuevo_camino = new Ciudad* [cantidad + 1];
+   
+   for (int i = 0; i < indice; i++)
       nuevo_camino[i] = camino[i];
    
-   nuevo_camino[cantidad] = nueva;
+   nuevo_camino[indice] = nueva;
    
-   delete []camino;
+   for (int i = indice + 1; i < cantidad; i++)
+      nuevo_camino[i] = camino[i - 1];
    
+   delete[] camino;
    camino = nuevo_camino;
    
    // Anotamos lo que aumenta el coste del recorrido
    // al agregar la ciudad
    if (cantidad > 1)
-      distancia_recorrida += nueva->calcula_distancia_con( camino[cantidad - 1] );
+      distancia_recorrida = distancia_recorrida + nueva->calcula_distancia_con( camino[cantidad - 1] );
    
    cantidad++;
+   
+   return *this;
 }
 
-Ciudad * Recorrido::obten_ciudad(int indice) {
+Ciudad* Recorrido::operator[](int indice) const {
    return camino[indice];
 }
 
@@ -41,4 +86,17 @@ int Recorrido::consulta_cantidad() {
 
 double Recorrido::calcula_coste() {
    return distancia_recorrida;
+}
+
+std::ostream& operator<<(std::ostream& output, const Recorrido& a_mostrar) {
+   for (int i = 0; i < a_mostrar.cantidad; i++) {
+      output << a_mostrar.camino[i]->consulta_x() << "  " << a_mostrar.camino[i]->consulta_y() << std::endl;
+   }
+   
+   return output;
+}
+
+Recorrido::~Recorrido() {
+   // Liberamos el array
+   delete[] camino;
 }

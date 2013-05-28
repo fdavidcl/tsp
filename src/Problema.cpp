@@ -39,7 +39,21 @@ double Problema::obten_distancia(int i, int j) {
    return i > j ? distancias[i][j] : i < j ? distancias[j][i] : 0;
 }
 
-Ciudad * Problema::obten_ciudad(int indice) {
+
+Ciudad* Problema::operator[](int indice) {
    // Devolvemos el puntero a la ciudad pedida
    return mapa[indice];
+}
+
+
+Problema::~Problema(){
+   delete[] distancias[0];
+   delete[] distancias;
+   
+   for (int i = 0; i < NUM_CIUDADES; i++) {
+      // Liberamos la memoria de cada puntero de los arrays
+      delete mapa[i];
+   }
+   
+   delete[] mapa;
 }

@@ -14,7 +14,7 @@ Recorrido Heuristica::vecino_mas_cercano_desde(int indice) {
    }
    
    // Agregamos la primera ciudad
-   intento.agrega(a_resolver->obten_ciudad(indice));
+   intento += (*a_resolver)[indice];
    visitadas[indice] = true;
    
    // Para cada ciudad agregada, buscamos la mas cercana
@@ -29,12 +29,13 @@ Recorrido Heuristica::vecino_mas_cercano_desde(int indice) {
          }
       }
       
-      intento.agrega(a_resolver->obten_ciudad(mas_cercana));
+      intento += (*a_resolver)[mas_cercana];
       visitadas[mas_cercana] = 1;
       ultima_visitada = mas_cercana;
    }
    
-   intento.agrega(a_resolver->obten_ciudad(indice));
+   // Volvemos a la primera ciudad
+   intento += (*a_resolver)[indice];
    
    // Liberamos memoria
    delete []visitadas;
@@ -43,11 +44,11 @@ Recorrido Heuristica::vecino_mas_cercano_desde(int indice) {
    return intento;
 }
 
-Recorrido Heuristica::soluciona(Problema *a_resolver) {
-   this->a_resolver = a_resolver;
+Recorrido Heuristica::soluciona(Problema& nuevo) {
+   a_resolver = &nuevo;
    Recorrido solucion;
    double min_coste = -1;
-   int num_ciudades = a_resolver->consulta_cantidad();
+   int num_ciudades = nuevo.consulta_cantidad();
    
    // Calculamos los recorridos que empiezan por distintas
    // ciudades y elegimos el de menor coste

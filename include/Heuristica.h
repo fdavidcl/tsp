@@ -24,7 +24,7 @@ class Heuristica {
     * Dato miembro que almacena un puntero al problema que ha de ser
     * resulto por Heuristica
     */
-   Problema *a_resolver;
+   Problema* a_resolver;
    
    /**
     * Este metodo obtiene el recorrido para, empezando por una ciudad
@@ -41,7 +41,7 @@ public:
     * @param *a_resolver Puntero a un Problema
     * @return Recorrido que soluciona el problema
     */
-   Recorrido soluciona(Problema *a_resolver);
+   Recorrido soluciona(Problema& a_resolver);
 };
 
 #endif
