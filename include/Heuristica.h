@@ -33,7 +33,7 @@ class Heuristica {
     * @param indice Indice de la ciudad de inicio
     * @return Objeto de Recorrido que se ha construido
     */ 
-   Recorrido vecino_mas_cercano_desde(int indice);
+   //Recorrido vecino_mas_cercano_desde(int indice);
 public:
    /**
     * Este metodo toma el objeto de la clase Problema y devuelve la
@@ -41,7 +41,8 @@ public:
     * @param *a_resolver Puntero a un Problema
     * @return Recorrido que soluciona el problema
     */
-   Recorrido soluciona(Problema& a_resolver);
+   Recorrido vecino_mas_cercano(Problema& a_resolver);
+   Recorrido evolucion(Problema& a_resolver);
 };
 
 #endif
