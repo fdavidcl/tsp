@@ -60,16 +60,22 @@ Recorrido& Recorrido::insertar(Ciudad *nueva, int indice) {
    
    nuevo_camino[indice] = nueva;
    
-   for (int i = indice + 1; i < cantidad; i++)
+   for (int i = indice + 1; i <= cantidad; i++)
       nuevo_camino[i] = camino[i - 1];
    
    delete[] camino;
    camino = nuevo_camino;
    
-   // Anotamos lo que aumenta el coste del recorrido
-   // al agregar la ciudad
-   if (cantidad > 1)
-      distancia_recorrida = distancia_recorrida + nueva->calcula_distancia_con( camino[cantidad - 1] );
+   // Anotamos lo que aumenta el coste del recorrido al agregar la ciudad
+   if (indice == 0)
+      distancia_recorrida = distancia_recorrida + nueva->calcula_distancia_con(camino[1]);
+   else if (indice == cantidad)
+      distancia_recorrida = distancia_recorrida + nueva->calcula_distancia_con(camino[cantidad - 1]);
+   else
+      //Añadimos la distancia a la ciudad anterior, a la siguiente y
+      //quitamos la distancia entre ambas, ya que antes pasábamos de una a otra
+      distancia_recorrida = distancia_recorrida - camino[indice -1]->calcula_distancia_con(camino[indice + 1])
+      + nueva->calcula_distancia_con(camino[indice - 1]) + nueva->calcula_distancia_con(camino[indice + 1]);
    
    cantidad++;
    
