@@ -78,8 +78,12 @@ Recorrido& Recorrido::insertar(Ciudad *nueva, int indice) {
 
 Recorrido& Recorrido::intercambiar(int ind1, int ind2) {
    if (ind1 < cantidad && ind2 < cantidad) {
-      
+      Ciudad* temporal = camino[ind1];
+      camino[ind1] = camino[ind2];
+      camino[ind2] = temporal;
    }
+   
+   return *this;
 }
 
 Ciudad* Recorrido::operator[](int indice) const {

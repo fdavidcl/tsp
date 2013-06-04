@@ -227,4 +227,6 @@ Recorrido Heuristica::evolucion(Problema& a_resolver) {
          solucion = intento;
       }
    }
+   
+   return solucion;
 }
