@@ -34,10 +34,3 @@ bool LectorArchivos::comprueba_existencia(char* nombre) {
    return archi.good();
 }
 
-LectorArchivos::~LectorArchivos() {
-   for (int i = 0; i < num_ciudades; i++) {
-      delete conjunto_ciudades[i];
-   }
-   
-   delete[] conjunto_ciudades;
-}

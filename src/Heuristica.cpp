@@ -173,6 +173,9 @@ Recorrido& Heuristica::genera_recorrido_aleatorio(Problema& ciudades) {
    int indice, max = tope;
    Recorrido* nuevo = new Recorrido;
    
+   for (int i = 0; i < tope; i++)
+      visitadas[i] = false;
+   
    for (int i = 0; i < tope; i++) {
       indice = random.genera(max);
       

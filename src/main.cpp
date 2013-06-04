@@ -30,8 +30,8 @@ int main(int argc, char *argv[]){
 	      
 	      // Creamos un objeto de Recorrido a partir de la solucion
 	      // que proporcione el objeto de Heuristica
-	      Recorrido solucion(estrategia.vecino_mas_cercano(instancia));
-	      
+	      //Recorrido solucion(estrategia.vecino_mas_cercano(instancia));
+	      Recorrido solucion(estrategia.evolucion(instancia));
 	      int num_ciudades = solucion.consulta_cantidad();
 	      
 	      // Mostramos por salida el camino y el coste asociado
