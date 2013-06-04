@@ -47,11 +47,6 @@ public:
     * @return Validez del archivo
     */
    bool comprueba_existencia(char* nombre);
-   
-   /**
-    * Destructor para la clase LectorArchivos
-    */
-   ~LectorArchivos();
 };
 
 #endif

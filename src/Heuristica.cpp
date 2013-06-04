@@ -100,7 +100,7 @@ Recorrido Heuristica::vecino_mas_cercano(Problema& a_resolver) {
 }
 
 
-Recorrido Heuristica::soluciona_con_insercion(Problema &a_resolver) {
+Recorrido Heuristica::insercion(Problema &a_resolver) {
    int num_ciudades = a_resolver.consulta_cantidad();
    int mas_oeste, mas_este = 0, mas_norte = 0;
    int mejor_ciudad, mejor_posicion;
