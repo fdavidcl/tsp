@@ -102,7 +102,7 @@ Recorrido Heuristica::vecino_mas_cercano(Problema& a_resolver) {
 
 Recorrido Heuristica::insercion(Problema &a_resolver) {
    int num_ciudades = a_resolver.consulta_cantidad();
-   int mas_oeste, mas_este = 0, mas_norte = 0;
+   int mas_oeste = 0, mas_este = 0, mas_norte = 0;
    int mejor_ciudad, mejor_posicion;
    double min_dist, dist_intento;
    bool *visitadas = new bool[num_ciudades];
@@ -129,7 +129,7 @@ Recorrido Heuristica::insercion(Problema &a_resolver) {
    visitadas[mas_oeste] = true;
    visitadas[mas_este] = true;
    visitadas[mas_norte] = true;
-   
+
    // Buscamos las mejores ciudades y sus mejores posiciones para añadirlas al recorrido
    while(solucion.consulta_cantidad() < num_ciudades){
       min_dist = -1;
