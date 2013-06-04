@@ -104,7 +104,7 @@ Recorrido Heuristica::insercion(Problema &a_resolver) {
    int num_ciudades = a_resolver.consulta_cantidad();
    int mas_oeste = 0, mas_este = 0, mas_norte = 0;
    int mejor_ciudad, mejor_posicion;
-   double min_dist, dist_intento;
+   double min_dist= -1, dist_intento;
    bool *visitadas = new bool[num_ciudades];
    Recorrido solucion, intento;
    
@@ -125,23 +125,36 @@ Recorrido Heuristica::insercion(Problema &a_resolver) {
    // Agregamos las primeras ciudades(la mas al norte, la mas al este y la mas al oeste)
    solucion += a_resolver[mas_oeste];
    solucion += a_resolver[mas_este];
-   solucion += a_resolver[mas_norte];
    visitadas[mas_oeste] = true;
    visitadas[mas_este] = true;
+
+   for(int pos_intento= 0; pos_intento < solucion.consulta_cantidad(); pos_intento++){
+      //Lo copiamos para que no se modifique solucion
+      intento = solucion;
+
+      dist_intento = (intento.insertar(a_resolver[mas_norte], pos_intento)+=intento[0]).calcula_coste();
+
+      if(min_dist < 0 || dist_intento < min_dist){
+         min_dist = dist_intento;
+         mejor_posicion = pos_intento;
+      }
+   }
+
+   solucion.insertar(a_resolver[mas_norte], mejor_posicion);
    visitadas[mas_norte] = true;
 
    // Buscamos las mejores ciudades y sus mejores posiciones para añadirlas al recorrido
-   while(solucion.consulta_cantidad() < num_ciudades){
+   while(solucion.consulta_cantidad()-1 < num_ciudades){
       min_dist = -1;
 
       //Podría ir como un método o dos, distintos
       for(int i = 0; i < num_ciudades; i++){
          if(!visitadas[i]){
-            for(int pos_intento= 0; pos_intento < solucion.consulta_cantidad(); pos_intento++){
+            for(int pos_intento = 0; pos_intento < solucion.consulta_cantidad(); pos_intento++){
                //Lo copiamos para que no se modifique solucion
                intento = solucion;
 
-               dist_intento = intento.insertar(a_resolver[i], pos_intento).calcula_coste();
+               dist_intento = (intento.insertar(a_resolver[i], pos_intento)+=intento[0]).calcula_coste();
 
                if(min_dist < 0 || dist_intento < min_dist){
                   min_dist = dist_intento;
@@ -156,7 +169,8 @@ Recorrido Heuristica::insercion(Problema &a_resolver) {
       visitadas[mejor_ciudad] = true;      
    }
 
-   solucion += a_resolver[mas_oeste];
+   //Añadimos la primera para cerrar el ciclo
+   solucion+=solucion[0];
 
    // Liberamos memoria
    delete[] visitadas;
