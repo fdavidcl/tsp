@@ -158,6 +158,9 @@ Recorrido Heuristica::soluciona_con_insercion(Problema &a_resolver) {
 
    solucion += a_resolver[mas_oeste];
 
+   // Liberamos memoria
+   delete[] visitadas;
+
    // Devolvemos el mejor recorrido
    return solucion;
 }
