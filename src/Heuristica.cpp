@@ -100,15 +100,15 @@ Recorrido Heuristica::vecino_mas_cercano(Problema& a_resolver) {
 }
 
 
-Recorrido Heuristica::soluciona_con_insercion(Problema &a_resolver) {
+Recorrido Heuristica::soluciona_con_insercion(Problema& a_resolver) {
    int num_ciudades = a_resolver.consulta_cantidad();
    int mas_oeste, mas_este = 0, mas_norte = 0;
    int mejor_ciudad, mejor_posicion;
    double min_dist, dist_intento;
-   bool *visitadas = new bool[num_ciudades];
+   bool* visitadas = new bool[num_ciudades];
    Recorrido solucion, intento;
    
-   this->a_resolver = &a_resolver;
+   //this->a_resolver = &a_resolver;
    
    // Inicializamos visitadas a falso y buscamos las ciudades que están en los extremos del mapa
    for (int i = 0; i < num_ciudades; i++) {
@@ -165,46 +165,49 @@ Recorrido Heuristica::soluciona_con_insercion(Problema &a_resolver) {
 
 Recorrido& Heuristica::genera_recorrido_aleatorio(Problema& ciudades) {
    int tope = ciudades.consulta_cantidad();
-   GeneradorAleatorios random;
+   //GeneradorAleatorios random;
    bool* visitadas = new bool[tope];
    int indice, max = tope;
    Recorrido* nuevo = new Recorrido;
+   Ciudad* primera = 0;
    
    for (int i = 0; i < tope; i++)
       visitadas[i] = false;
    
    for (int i = 0; i < tope; i++) {
-      indice = random.genera(max);
+      indice = int(max*(rand()/(RAND_MAX+1.0)));
       
-      for (int k = 0; k < tope; k++) {
+      for (int k = 0; k <= indice; k++) {
          visitadas[k] ? indice++ : 0;
       }
+      
+      if (primera == 0)
+         primera = ciudades[indice];
       
       *nuevo += ciudades[indice];
       visitadas[indice] = true;
       max--;
    }
    
+   *nuevo += primera;
+   
    delete[] visitadas;
    
    return *nuevo;
 }
 
-/*
-Recorrido Heuristica::genera_mutacion(Recorrido& actual) {
-   Recorrido nuevo(actual);
-}*/
-
-
 Recorrido Heuristica::evolucion(Problema& a_resolver) {
    Recorrido solucion;
    int num_ciudades = a_resolver.consulta_cantidad();
-   GeneradorAleatorios random;
-   Recorrido intento;
-   int g = num_ciudades, e = num_ciudades*1000;
+   //GeneradorAleatorios random;
+   Recorrido intento;//(vecino_mas_cercano(a_resolver)), nuevo;
+   int g = 10000, e = 100000000/num_ciudades/num_ciudades, c = num_ciudades/10;
    int swap_a, swap_b;
+   srand(time(0));
    
    int menor_coste = -1;
+   solucion = intento;
+   //srand(time(0));
    
    // Primero generamos un recorrido aleatorio lo mejor posible
    for (int i = 0; i < g; i++) {
@@ -216,20 +219,126 @@ Recorrido Heuristica::evolucion(Problema& a_resolver) {
       }
    }
    
+   //intento = ;
+   
    // Ahora realizamos "mutaciones" sobre el recorrido, para 
    // tratar de mejorarlo
    // Una generacion consta de g recorridos, y se realiza una
    // evolucion con e generaciones
    
+   /** Version 1: Vamos modificando solucion constantemente /
    for (int i = 0; i < e; i++) {
-      swap_a = random.genera(num_ciudades);
-      swap_b = random.genera(num_ciudades);
+      Recorrido copia(intento);
+      
+      for (int j = 0; j < c; j++) {
+         //swap_b = int(5*(rand()/(RAND_MAX+1.0)));
+         swap_a = int((num_ciudades-swap_b)*(rand()/(RAND_MAX+1.0)));
+         swap_b = int(num_ciudades*(rand()/(RAND_MAX+1.0)));
+         //swap_b = swap_a + swap_b;
+         
+         intento.intercambiar(swap_a, swap_b);
+      }
       
       if (intento.calcula_coste() < menor_coste || menor_coste == -1) {
          menor_coste = intento.calcula_coste();
          solucion = intento;
+      } else {
+         intento = copia;
+      }
+   }**/
+   
+   /** Version 2: modificamos solucion tras cada generacion /
+   for (int i = 0; i < e; i++) {
+      for (int k = 0; k < g; k++) {
+         swap_a = int(num_ciudades*(rand()/(RAND_MAX+1.0)));
+         swap_b = int(num_ciudades*(rand()/(RAND_MAX+1.0)));
+         
+         nuevo = intento;
+         nuevo.intercambiar(swap_a, swap_b);
+         
+         if (nuevo.calcula_coste() < menor_coste || menor_coste == -1) {
+            menor_coste = nuevo.calcula_coste();
+            solucion = nuevo;
+         }
+      }
+      
+      intento = solucion;
+   }**/
+   
+   /** Version 3: Tratamos de hacer mutaciones no aleatorias **/
+   for (int m = 0; m < e; m++) {
+      for (int i = 0; i < num_ciudades; i++) {
+         for (int j = 0; j < num_ciudades; j++) {
+            if (intento.intercambiar(i, j).calcula_coste() < menor_coste || menor_coste == -1) {
+               menor_coste = intento.calcula_coste();
+               solucion = intento;
+            }
+            else {
+               intento.intercambiar(i, j);
+            }
+         }
       }
    }
    
    return solucion;
+}
+
+Recorrido Heuristica::suma(Problema& a_resolver) {
+   Recorrido solucion;
+   int num_ciudades = a_resolver.consulta_cantidad();
+   double ultima_suma = 0, suma;
+   double mas_baja;
+   Ciudad* proxima;
+   double a, b;
+   
+   Ciudad** extremos = new Ciudad* [2];
+   double mas_alta = -1;
+   
+   for (int i = 0; i < num_ciudades; i++) {
+      suma = a_resolver[i]->consulta_x() + a_resolver[i]->consulta_y();
+      
+      if (suma < mas_baja || mas_baja < 0) {
+         mas_baja = suma;
+         extremos[0] = a_resolver[i];
+      }
+      
+      if (suma > mas_alta || mas_alta < 0) {
+         mas_alta = suma;
+         extremos[1] = a_resolver[i];
+      }
+   }
+   
+   // Calculamos los coeficientes de la recta y = ax+b
+   a = (extremos[1]->consulta_y() - extremos[0]->consulta_y())/(extremos[1]->consulta_x() - extremos[0]->consulta_x());
+   b = extremos[0]->consulta_y() - extremos[0]->consulta_x() * a;
+   
+   for (int k = 0; k < num_ciudades; k++) {
+      mas_baja = -1;
+      
+      for (int i = 0; i < num_ciudades; i++) {
+         suma = a_resolver[i]->consulta_x() + a_resolver[i]->consulta_y();
+         
+         /*std::cout << (mas_baja < 0);
+         std::cout << (suma < mas_baja);
+         std::cout << (suma > ultima_suma);*/
+         
+         if (suma > ultima_suma && (mas_baja < 0 || suma < mas_baja)) {
+            mas_baja = suma;
+            proxima = a_resolver[i];
+            
+            //std::cout << "Cambiamos proxima" << std::endl;
+         }
+         
+      }
+      
+      //std::cout << "Añadimos ciudad " << proxima << std::endl;
+      
+      ultima_suma = mas_baja;
+      solucion += proxima;
+   }
+   
+   solucion += solucion[0];
+   
+   return solucion;
+   
 }

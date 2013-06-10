@@ -8,14 +8,14 @@ PROGRAMA='bin/tsp'
 SCRIPT="script_`date +%s%N`.gnup"
 
 # Comprobamos que se ha introducido el argumento del archivo
-[[ $# -eq 1 ]] && {
+[[ $# -eq 2 ]] && {
    # Comprobamos que se ha compilado el programa
    [[ -f $PROGRAMA ]] && {
       # Comprobamos que la instancia del TSP existe 
       [[ -f $1 ]] && {
          
          # Ejecutamos el programa
-         $PROGRAMA $1 > "$1.data" && {
+         $PROGRAMA $1 $2 > "$1.data" && {
             # Generamos el script de Gnuplot
             printf 'set xlabel "Coordenada X"
                set ylabel "Coordenada Y"
@@ -24,14 +24,15 @@ SCRIPT="script_`date +%s%N`.gnup"
                set grid
                set terminal png
                set output basename.".png"
-               plot basename.".data" with linespoints' > $SCRIPT;
+               plot basename.".data" with linespoints' > $SCRIPT
             
-            # Generamos el grafico y lo abrimos
             gnuplot -e "basename='$1'" $SCRIPT && {
                rm $SCRIPT;
                echo "$0: Gráfico generado en $1.png"
-               (xdg-open "$1.png" &> /dev/null)&
+               (xdg-open "$1.png" 2> /dev/null)&
             } || echo "$0: gnuplot ha fallado."
+         } || {
+            echo "$0: El programa ha fallado."
          };
       } || {
          echo "$0: $1 no existe o no es un archivo regular.";
@@ -42,7 +43,7 @@ SCRIPT="script_`date +%s%N`.gnup"
       exit 2;
    }
 } || {
-   echo "$0: No se ha proporcionado una instancia del TSP";
-   echo "Uso: $0 <NOMBRE_ARCHIVO>";
+   echo "$0: Número incorrecto de argumentos";
+   echo "Uso: $0 <NOMBRE_ARCHIVO> <NUM_HEURISTICA>";
    exit 1;
 }
