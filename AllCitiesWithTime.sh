@@ -9,6 +9,13 @@ date +%T
  
 for city in ${cities[*]}
 do
-   ./plot.sh ./instancias/$city && date +%T && ./bin/tsp ./instancias/$city >> ./resultado.txt && date +%T
+   for i in {1,2,3}
+   do
+      ./plot.sh ./instancias/$city $i
+      date +%T
+      ./bin/tsp $i ./instancias/$city >> ./resultado.txt
+      echo "./bin/tsp $i ./instancias/$city" 
+      date +%T
+   done
 done
 
