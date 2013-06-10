@@ -13,8 +13,8 @@ do
    do
       ./plot.sh ./instancias/$city $i
       date +%T
-      ./bin/tsp $i ./instancias/$city >> ./resultado.txt
-      echo "./bin/tsp $i ./instancias/$city" 
+      ./bin/tsp ./instancias/$city >> ./resultado.txt $i 
+      echo "./bin/tsp ./instancias/$city" $i  
       date +%T
    done
 done
