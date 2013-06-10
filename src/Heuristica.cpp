@@ -118,6 +118,12 @@ Recorrido Heuristica::insercion(Problema &a_resolver) {
          mas_oeste = i;
       if(a_resolver[i]->consulta_x() > a_resolver[mas_este]->consulta_x())
          mas_este = i;
+   }
+
+   //Esto es complicado de explicar, si lo ponemos en el otro bucle, puede ser que la ciudad mas 
+   //al norte de todo el mapa sea la mas al oeste(o al este) de las anteriores pero no del mapa,
+   //luego no se registraria como la mas al norte(en pr1002.tsp ocurre)
+   for (int i = 0; i < num_ciudades; i++) {
       if(a_resolver[i]->consulta_y() < a_resolver[mas_norte]->consulta_y() && i != mas_oeste && i != mas_este)
          mas_norte = i;
    }
@@ -125,22 +131,9 @@ Recorrido Heuristica::insercion(Problema &a_resolver) {
    // Agregamos las primeras ciudades(la mas al norte, la mas al este y la mas al oeste)
    solucion += a_resolver[mas_oeste];
    solucion += a_resolver[mas_este];
+   solucion += a_resolver[mas_norte];
    visitadas[mas_oeste] = true;
    visitadas[mas_este] = true;
-
-   for(int pos_intento= 0; pos_intento < solucion.consulta_cantidad(); pos_intento++){
-      //Lo copiamos para que no se modifique solucion
-      intento = solucion;
-
-      dist_intento = (intento.insertar(a_resolver[mas_norte], pos_intento)+=intento[0]).calcula_coste();
-
-      if(min_dist < 0 || dist_intento < min_dist){
-         min_dist = dist_intento;
-         mejor_posicion = pos_intento;
-      }
-   }
-
-   solucion.insertar(a_resolver[mas_norte], mejor_posicion);
    visitadas[mas_norte] = true;
 
    // Buscamos las mejores ciudades y sus mejores posiciones para añadirlas al recorrido
@@ -169,7 +162,7 @@ Recorrido Heuristica::insercion(Problema &a_resolver) {
       visitadas[mejor_ciudad] = true;      
    }
 
-   //Añadimos la primera para cerrar el ciclo
+   //Añadimos la primera ciudad para cerrar el ciclo
    solucion+=solucion[0];
 
    // Liberamos memoria
