@@ -8,6 +8,6 @@ GeneradorAleatorios::GeneradorAleatorios() {
 
 int GeneradorAleatorios::genera(int max) {
 	// Ajustamos cada aleatorio a las condiciones pedidas
-	int aleatorio = rand()*(max)/RAND_MAX;
+	int aleatorio = int(max*(rand()/(RAND_MAX+1.0)));
 	return aleatorio;
 }

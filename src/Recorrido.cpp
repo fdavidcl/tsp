@@ -9,6 +9,16 @@ Recorrido::Recorrido()
    camino = 0;
 }
 
+Recorrido::Recorrido(const Recorrido& a_copiar) {
+   cantidad = a_copiar.cantidad;
+   distancia_recorrida = a_copiar.distancia_recorrida;
+   camino = new Ciudad* [cantidad];
+   
+   for (int i = 0; i < cantidad; i++) {
+      camino[i] = a_copiar.camino[i];
+   }
+}
+
 Recorrido& Recorrido::operator+(Ciudad *nueva) const {
    // Creamos el array de punteros que contenga
    // punteros a todas las ciudades almacenadas
@@ -46,11 +56,11 @@ Recorrido& Recorrido::operator=(Recorrido& a_asignar) {
    return *this;
 }
 
-Recorrido& Recorrido::operator+=(Ciudad *nueva) {
+Recorrido& Recorrido::operator+=(Ciudad* nueva) {
    return insertar(nueva, cantidad);
 }
 
-Recorrido& Recorrido::insertar(Ciudad *nueva, int indice) {
+Recorrido& Recorrido::insertar(Ciudad* nueva, int indice) {
    if(indice < 0)
       indice = 0;
    else if(indice > cantidad)
@@ -85,11 +95,32 @@ Recorrido& Recorrido::insertar(Ciudad *nueva, int indice) {
    return *this;
 }
 
+Recorrido& Recorrido::borrar(int indice) {
+   if (indice < cantidad) {      
+      for (int i = indice; i < cantidad - 1; i++) {
+         camino[i] = camino[i+1];
+      }
+      
+      cantidad--;
+   }
+   
+   return *this;
+}
+
 Recorrido& Recorrido::intercambiar(int ind1, int ind2) {
    if (ind1 < cantidad && ind2 < cantidad) {
       Ciudad* temporal = camino[ind1];
       camino[ind1] = camino[ind2];
       camino[ind2] = temporal;
+   }
+   
+   return *this;
+}
+
+Recorrido& Recorrido::transferir(int a_cambiar, int ind_nuevo) {
+   if (a_cambiar < cantidad && ind_nuevo < cantidad) {
+      insertar(camino[a_cambiar], ind_nuevo+1);
+      borrar(a_cambiar > ind_nuevo ? a_cambiar + 1 : a_cambiar);
    }
    
    return *this;

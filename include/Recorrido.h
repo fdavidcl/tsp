@@ -43,6 +43,8 @@ public:
     */
    Recorrido();
    
+   Recorrido(const Recorrido& a_copiar);
+   
    /**
     * Sobrecarga del operador + que permite agregar una nueva
     * Ciudad al Recorrido actual, devolviendo una referencia
@@ -69,6 +71,10 @@ public:
    Recorrido& insertar(Ciudad* nueva, int indice);
    
    Recorrido& intercambiar(int, int);
+   
+   Recorrido& borrar(int);
+   
+   Recorrido& transferir(int, int);
    
    /**
     * Metodo que devuelve un puntero a un objeto de

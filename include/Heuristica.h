@@ -8,9 +8,11 @@
  */
 #ifndef HEURISTICA
 #define HEURISTICA
+#include <ctime>
+#include <cstdlib>
 #include "Recorrido.h"
 #include "Problema.h"
-#include "Aleatorio.h"
+#include <iostream>
 
 /**
  * ### Clase Heuristica
@@ -54,6 +56,8 @@ public:
    Recorrido insercion(Problema &a_resolver);
 
    Recorrido evolucion(Problema& a_resolver);
+   
+   Recorrido suma(Problema& a_resolver);
 };
 
 #endif
