@@ -59,38 +59,66 @@ Recorrido& Recorrido::operator=(Recorrido& a_asignar) {
 Recorrido& Recorrido::operator+=(Ciudad* nueva) {
    return insertar(nueva, cantidad);
 }
-
+/*
 Recorrido& Recorrido::insertar(Ciudad* nueva, int indice) {
-   if(indice < 0)
+   if (indice < 0) {
       indice = 0;
-   else if(indice > cantidad)
+   } else if (indice > cantidad) {
       indice = cantidad;
+   }
    
-   Ciudad** nuevo_camino = new Ciudad* [cantidad + 1];
+   cantidad++;
+   
+   Ciudad** nuevo_camino = new Ciudad* [cantidad];
    
    for (int i = 0; i < indice; i++)
       nuevo_camino[i] = camino[i];
    
    nuevo_camino[indice] = nueva;
    
-   for (int i = indice + 1; i <= cantidad; i++)
+   for (int i = indice + 1; i < cantidad; i++)
       nuevo_camino[i] = camino[i - 1];
    
    delete[] camino;
    camino = nuevo_camino;
    
    // Anotamos lo que aumenta el coste del recorrido al agregar la ciudad
-   if (indice == 0)
+   if (indice == 0) {
       distancia_recorrida += nueva->calcula_distancia_con(camino[1]);
-   else if (indice == cantidad)
-      distancia_recorrida += nueva->calcula_distancia_con(camino[cantidad - 1]);
-   else
-      //Añadimos la distancia a la ciudad anterior, a la siguiente y
-      //quitamos la distancia entre ambas, ya que antes pasábamos de una a otra
-      distancia_recorrida += -camino[indice -1]->calcula_distancia_con(camino[indice + 1]) +
-      nueva->calcula_distancia_con(camino[indice - 1]) + nueva->calcula_distancia_con(camino[indice + 1]);
+   } else if (indice == cantidad - 1) {
+      distancia_recorrida += nueva->calcula_distancia_con(camino[indice - 1]);
+   } else {
+      distancia_recorrida += nueva->calcula_distancia_con(camino[indice - 1])
+         + nueva->calcula_distancia_con(camino[indice + 1])
+         - camino[indice - 1]->calcula_distancia_con(camino[indice + 1]);
+   }
+   
+   return *this;
+}*/
+
+Recorrido& Recorrido::insertar(Ciudad* nueva, int indice) {
+   Ciudad** nuevo_camino = new Ciudad* [cantidad + 1];
+   
+   for (int i = 0; i < indice; i++) {
+      nuevo_camino[i] = camino[i];
+   }
+   
+   nuevo_camino[indice] = nueva;
+   
+   for (int i = indice + 1; i <= cantidad; i++) {
+      nuevo_camino[i] = camino[i - 1];
+   }
+   
+   delete[] camino;
+   camino = nuevo_camino;
    
    cantidad++;
+   
+   distancia_recorrida = 0;
+   
+   for (int i = 0; i < cantidad - 1; i++) {
+      distancia_recorrida += camino[i]->calcula_distancia_con(camino[i+1]);
+   }
    
    return *this;
 }

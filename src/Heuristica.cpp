@@ -293,11 +293,15 @@ Recorrido Heuristica::evolucion(Problema& a_resolver) {
    return solucion;
 }
 
+// TODO: Añadir ponderación (por proporción entre x e y)
+
 Recorrido Heuristica::suma(Problema& a_resolver) {
-   Recorrido solucion;
-   int num_ciudades = a_resolver.consulta_cantidad();
+   Recorrido solucion, abajo, arriba;
+   int num_ciudades = a_resolver.consulta_cantidad(),
+      ciudades_abajo,
+      ciudades_arriba;
    double ultima_suma = 0, suma;
-   double mas_baja;
+   double mas_baja = -1;
    Ciudad* proxima;
    double a, b;
    
@@ -344,10 +348,33 @@ Recorrido Heuristica::suma(Problema& a_resolver) {
       //std::cout << "Añadimos ciudad " << proxima << std::endl;
       
       ultima_suma = mas_baja;
-      solucion += proxima;
+      
+      if (proxima->consulta_y() <= a*proxima->consulta_x()+b) {
+         abajo += proxima;
+      } else {
+         arriba += proxima;
+      }
    }
    
-   solucion += solucion[0];
+   ciudades_abajo = abajo.consulta_cantidad();
+   ciudades_arriba = arriba.consulta_cantidad();
+   
+   std::cout << num_ciudades << std::endl;
+   
+   std::cout << "ABAJO" << std::endl;
+   for (int i = 0; i < ciudades_abajo; i++) {
+      solucion += abajo[i];
+      std::cout << abajo[i]->consulta_x() << " " << abajo[i]->consulta_y() << "  ";
+   }
+   
+   std::cout << "ARRIBA" << std::endl;
+   
+   for (int i = 0; i < ciudades_arriba; i++) {
+      solucion += arriba[ciudades_arriba - i - 1];
+      std::cout << arriba[ciudades_arriba - i - 1]->consulta_x() << " " << arriba[ciudades_arriba - i - 1]->consulta_y() << "  ";
+   }
+   
+   solucion += extremos[0];
    
    return solucion;
    
