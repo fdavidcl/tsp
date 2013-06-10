@@ -31,7 +31,7 @@ int main(int argc, char *argv[]){
 	      Problema instancia(lector.lee(argv[1]));
 	      Heuristica estrategia;
 	      
-   	   Estrategia soluciones[] = {&Heuristica::vecino_mas_cercano, &Heuristica::soluciona_con_insercion, &Heuristica::suma};
+   	   Estrategia soluciones[] = {&Heuristica::vecino_mas_cercano, &Heuristica::insercion, &Heuristica::suma};
    	   int a_usar = atoi(argv[2]);
    	   
    	   if (a_usar > 0 && a_usar < 4) {
