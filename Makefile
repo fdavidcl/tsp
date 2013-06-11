@@ -5,13 +5,13 @@ LIB=./lib
 OBJ=./obj
 SRC=./src
 
-all: $(OBJ)/Ciudad.o $(OBJ)/Heuristica.o $(OBJ)/LectorArchivos.o $(OBJ)/main.o $(OBJ)/Problema.o $(OBJ)/Recorrido.o
+all: $(OBJ)/Ciudad.o $(OBJ)/GestorArchivos.o $(OBJ)/Heuristica.o $(OBJ)/main.o $(OBJ)/Problema.o $(OBJ)/Recorrido.o
 	g++ -o $(BIN)/tsp $^ && cat README
 $(OBJ)/Ciudad.o: $(SRC)/Ciudad.cpp $(INCLUDE)/Ciudad.h
 	g++ -o $@ -c $< -I$(INCLUDE)
-$(OBJ)/Heuristica.o: $(SRC)/Heuristica.cpp $(INCLUDE)/Heuristica.h
+$(OBJ)/GestorArchivos.o: $(SRC)/GestorArchivos.cpp $(INCLUDE)/GestorArchivos.h
 	g++ -o $@ -c $< -I$(INCLUDE)
-$(OBJ)/LectorArchivos.o: $(SRC)/LectorArchivos.cpp $(INCLUDE)/LectorArchivos.h
+$(OBJ)/Heuristica.o: $(SRC)/Heuristica.cpp $(INCLUDE)/Heuristica.h
 	g++ -o $@ -c $< -I$(INCLUDE)
 $(OBJ)/main.o: $(SRC)/main.cpp 
 	g++ -o $@ -c $< -I$(INCLUDE)
