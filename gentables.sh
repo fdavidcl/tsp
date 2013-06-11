@@ -99,7 +99,7 @@ printf "
                <td>Vecino m&aacute;s cercano</td>
                <td>Inserci&oacute;n m&aacute;s econ&oacute;mica</td>
                <td>Comparaci&oacute;n de coordenadas</td>
-            </td>" >> $OFILE
+            </tr>" >> $OFILE
 
 for MAP in ${MAPAS[*]}
 do

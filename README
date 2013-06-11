@@ -9,7 +9,7 @@
 ************************************************
 
 Para ejecutar el programa, puede utilizar el ejecutable ubicado
-en ./bin/tsp o bien, para obtener un gráfico generado por
-Gnuplot, ejecute ./plot.sh <RUTA_PROBLEMA>
+en ./bin/tsp o bien, para obtener una tabla de resultados y
+gráficos mediante el script ./gentables.sh.
 
 

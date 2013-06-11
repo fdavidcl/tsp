@@ -39,8 +39,8 @@ void GestorArchivos::escribe(const char* nombre_archivo, Recorrido& solucion) {
    salida.open(nombre_archivo);
    
    salida << "# TSP: El problema del viajante de comercio" << endl;
-   salida << "# Utilice plot.sh para generar un grafico con la solucion" << endl << "# Recorrido:" << endl;
+   salida << "# Utilice gentables.sh para generar tablas de resultados y graficos" << endl;
+   salida << "# Coste del recorrido: " << solucion.calcula_coste() << endl << "# Recorrido:" << endl;
    salida << solucion << endl;
-   salida << "# Coste del recorrido: " << solucion.calcula_coste() << endl;
 }
 
