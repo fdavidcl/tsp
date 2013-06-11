@@ -148,11 +148,11 @@ Recorrido Heuristica::insercion_completa(Problema &a_resolver, Recorrido parcial
    double min_dist, dist_intento;
    Recorrido solucion(parcial), intento;
    
-   // Buscamos las mejores ciudades y sus mejores posiciones para añadirlas al recorrido
+   // Buscamos las mejores ciudades y sus mejores posiciones para agregarlas al recorrido
    for(int k = solucion.consulta_cantidad(); k < num_ciudades; k++){
       min_dist = -1;
 
-      //Podría ir como un método o dos, distintos
+      //Podria ir como un metodo o dos, distintos
       for(int i = 0; i < num_ciudades; i++){
          if(!visitadas[i]){
             for(int pos_intento = 0; pos_intento < solucion.consulta_cantidad(); pos_intento++){
