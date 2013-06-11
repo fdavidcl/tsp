@@ -39,7 +39,7 @@ class Heuristica {
 
    //Recorrido vecino_mas_cercano_desde(int indice);
 
-    
+   Recorrido insercion_completa(Problema &a_resolver, Recorrido parcial, bool *visitadas);
    
    Recorrido& genera_recorrido_aleatorio(Problema&);
    //Recorrido genera_mutacion(Recorrido& actual);
@@ -53,7 +53,9 @@ public:
     */
    Recorrido vecino_mas_cercano(Problema& a_resolver);
 
-   Recorrido insercion(Problema &a_resolver);
+   Recorrido insercion_lejanas(Problema &a_resolver);
+
+   Recorrido insercion_cardinales(Problema &a_resolver);
 
    Recorrido evolucion(Problema& a_resolver);
    

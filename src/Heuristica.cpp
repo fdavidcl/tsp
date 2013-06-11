@@ -99,63 +99,104 @@ Recorrido Heuristica::vecino_mas_cercano(Problema& a_resolver) {
    return solucion;
 }
 
-
-Recorrido Heuristica::insercion(Problema &a_resolver) {
+Recorrido Heuristica::insercion_cardinales(Problema &a_resolver) {
    int num_ciudades = a_resolver.consulta_cantidad();
-   int mas_oeste = 0, mas_este = 0, mas_norte = 0;
-   /*int mas_noroeste = 0, mas_noreste = 0, mas_sur = 0;
-   double a, b;*/
-   int mejor_ciudad, mejor_posicion;
-   double min_dist= -1, dist_intento;
+   int primera=0, segunda=0, tercera=0;
    bool *visitadas = new bool[num_ciudades];
-   Recorrido solucion, intento;
+   Recorrido triangulo;
    
    //this->a_resolver = &a_resolver;
    
-   // Inicializamos visitadas a falso y buscamos las ciudades que están en los extremos del mapa
+   // Inicializamos visitadas a falso y buscamos las ciudades que estan en los extremos del mapa
    for (int i = 0; i < num_ciudades; i++) {
-      visitadas[i] = false;      
+      visitadas[i] = false;
 
-      
-      /*if((a_resolver[i]->consulta_x()/(a_resolver[i]->consulta_y()+1)) < a)
-         mas_noroeste = i;
-         a = a_resolver[i]->consulta_x()/(a_resolver[i]->consulta_y()+1);
-      if(pow(a_resolver[i]->consulta_x(),2)+pow(a_resolver[i]->consulta_y(),2) < b)
-         mas_noreste = i;
-         b = (a_resolver[i]->consulta_x(),2)+pow(a_resolver[i]->consulta_y(),2);
-      if(a_resolver[i]->consulta_y() > a_resolver[mas_sur]->consulta_y())
-         mas_sur = i;
-
-      // Agregamos las primeras ciudades(la mas al norte, la mas al este y la mas al oeste)
-      solucion += a_resolver[mas_noroeste];
-      solucion += a_resolver[mas_noreste];
-      solucion += a_resolver[mas_sur];
-      visitadas[mas_noroeste] = true;
-      visitadas[mas_noreste] = true;
-      visitadas[mas_sur] = true;
-*/
-      if(a_resolver[i]->consulta_x() < a_resolver[mas_oeste]->consulta_x())
-         mas_oeste = i;
-      if(a_resolver[i]->consulta_x() > a_resolver[mas_este]->consulta_x())
-         mas_este = i;
+   //La que esta mas a la izquierda
+      if(a_resolver[i]->consulta_x() < a_resolver[primera]->consulta_x())
+         primera = i;
+      //La que esta mas a la derecha
+      if(a_resolver[i]->consulta_x() > a_resolver[segunda]->consulta_x())
+         segunda = i;
    }
 
-   //Esto es complicado de explicar, si lo ponemos en el otro bucle, puede ser que la ciudad mas 
-   //al norte de todo el mapa sea la mas al oeste(o al este) de las anteriores pero no del mapa,
-   //luego no se registraria como la mas al norte(en pr1002.tsp ocurre)
+   //La que esta mas abajo
    for (int i = 0; i < num_ciudades; i++) {
-      if(a_resolver[i]->consulta_y() < a_resolver[mas_norte]->consulta_y() && i != mas_oeste && i != mas_este)
-         mas_norte = i;
+      if(a_resolver[i]->consulta_y() < a_resolver[tercera]->consulta_y() && i != primera && i != segunda)
+         tercera = i;
    }
    
-   // Agregamos las primeras ciudades(la mas al norte, la mas al este y la mas al oeste)
-   solucion += a_resolver[mas_oeste];
-   solucion += a_resolver[mas_este];
-   solucion += a_resolver[mas_norte];
-   visitadas[mas_oeste] = true;
-   visitadas[mas_este] = true;
-   visitadas[mas_norte] = true;
+   // Agregamos las primeras ciudades
+   triangulo += a_resolver[primera];
+   triangulo += a_resolver[segunda];
+   triangulo += a_resolver[tercera];
+   visitadas[primera] = true;
+   visitadas[segunda] = true;
+   visitadas[tercera] = true;
 
+   Recorrido solucion(insercion_completa(a_resolver, triangulo, visitadas));
+   
+   // Liberamos memoria
+   delete[] visitadas;
+
+   // Devolvemos el mejor recorrido
+   return solucion;
+}
+
+Recorrido Heuristica::insercion_lejanas(Problema &a_resolver) {
+   int num_ciudades = a_resolver.consulta_cantidad();
+   int primera=0, segunda=0, tercera=0;
+   double min_dist= -1, dist_intento;
+   bool *visitadas = new bool[num_ciudades];
+   Recorrido triangulo;
+   
+   //this->a_resolver = &a_resolver;
+   
+   // Inicializamos visitadas a falso y buscamos las ciudades que estan en los extremos del mapa
+   for (int i = 0; i < num_ciudades; i++) {
+      visitadas[i] = false;
+
+      //Buscamos las ciudades mas lejanas entre ellas
+      for (int j = 0; j < num_ciudades; j++) {
+         if(j != i){
+            for (int k = 0; k < num_ciudades; k++) {
+               if(k != i && k!=j){
+                  dist_intento = a_resolver[i]->calcula_distancia_con(a_resolver[j]) 
+                     + a_resolver[j]->calcula_distancia_con(a_resolver[k]) 
+                     + a_resolver[k]->calcula_distancia_con(a_resolver[i]);
+                  if(min_dist<0 || dist_intento < min_dist){
+                     primera = i;
+                     segunda = j;
+                     tercera = k;
+                  }
+               }
+            }
+         }
+      }
+   }
+   
+   // Agregamos las primeras ciudades
+   triangulo += a_resolver[primera];
+   triangulo += a_resolver[segunda];
+   triangulo += a_resolver[tercera];
+   visitadas[primera] = true;
+   visitadas[segunda] = true;
+   visitadas[tercera] = true;
+
+   Recorrido solucion(insercion_completa(a_resolver, triangulo, visitadas));
+   
+   // Liberamos memoria
+   delete[] visitadas;
+
+   // Devolvemos el mejor recorrido
+   return solucion;
+}
+   
+Recorrido Heuristica::insercion_completa(Problema &a_resolver, Recorrido parcial, bool *visitadas) {
+   int num_ciudades = a_resolver.consulta_cantidad();
+   int mejor_ciudad, mejor_posicion;
+   double min_dist, dist_intento;
+   Recorrido solucion(parcial), intento;
+   
    // Buscamos las mejores ciudades y sus mejores posiciones para añadirlas al recorrido
    for(int k = solucion.consulta_cantidad(); k < num_ciudades; k++){
       min_dist = -1;
@@ -185,13 +226,9 @@ Recorrido Heuristica::insercion(Problema &a_resolver) {
    //Añadimos la primera ciudad para cerrar el ciclo
    solucion+=solucion[0];
 
-   // Liberamos memoria
-   delete[] visitadas;
-
    // Devolvemos el mejor recorrido
    return solucion;
 }
-
 
 Recorrido& Heuristica::genera_recorrido_aleatorio(Problema& ciudades) {
    int tope = ciudades.consulta_cantidad();
