@@ -53,9 +53,7 @@ public:
     */
    Recorrido vecino_mas_cercano(Problema& a_resolver);
 
-   Recorrido insercion_lejanas(Problema &a_resolver);
-
-   Recorrido insercion_cardinales(Problema &a_resolver);
+   Recorrido insercion(Problema &a_resolver);
 
    Recorrido evolucion(Problema& a_resolver);
    

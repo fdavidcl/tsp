@@ -99,7 +99,7 @@ Recorrido Heuristica::vecino_mas_cercano(Problema& a_resolver) {
    return solucion;
 }
 
-Recorrido Heuristica::insercion_cardinales(Problema &a_resolver) {
+Recorrido Heuristica::insercion(Problema &a_resolver) {
    int num_ciudades = a_resolver.consulta_cantidad();
    int primera=0, segunda=0, tercera=0;
    bool *visitadas = new bool[num_ciudades];
@@ -123,55 +123,6 @@ Recorrido Heuristica::insercion_cardinales(Problema &a_resolver) {
    for (int i = 0; i < num_ciudades; i++) {
       if(a_resolver[i]->consulta_y() < a_resolver[tercera]->consulta_y() && i != primera && i != segunda)
          tercera = i;
-   }
-   
-   // Agregamos las primeras ciudades
-   triangulo += a_resolver[primera];
-   triangulo += a_resolver[segunda];
-   triangulo += a_resolver[tercera];
-   visitadas[primera] = true;
-   visitadas[segunda] = true;
-   visitadas[tercera] = true;
-
-   Recorrido solucion(insercion_completa(a_resolver, triangulo, visitadas));
-   
-   // Liberamos memoria
-   delete[] visitadas;
-
-   // Devolvemos el mejor recorrido
-   return solucion;
-}
-
-Recorrido Heuristica::insercion_lejanas(Problema &a_resolver) {
-   int num_ciudades = a_resolver.consulta_cantidad();
-   int primera=0, segunda=0, tercera=0;
-   double min_dist= -1, dist_intento;
-   bool *visitadas = new bool[num_ciudades];
-   Recorrido triangulo;
-   
-   //this->a_resolver = &a_resolver;
-   
-   // Inicializamos visitadas a falso y buscamos las ciudades que estan en los extremos del mapa
-   for (int i = 0; i < num_ciudades; i++) {
-      visitadas[i] = false;
-
-      //Buscamos las ciudades mas lejanas entre ellas
-      for (int j = 0; j < num_ciudades; j++) {
-         if(j != i){
-            for (int k = 0; k < num_ciudades; k++) {
-               if(k != i && k!=j){
-                  dist_intento = a_resolver[i]->calcula_distancia_con(a_resolver[j]) 
-                     + a_resolver[j]->calcula_distancia_con(a_resolver[k]) 
-                     + a_resolver[k]->calcula_distancia_con(a_resolver[i]);
-                  if(min_dist<0 || dist_intento < min_dist){
-                     primera = i;
-                     segunda = j;
-                     tercera = k;
-                  }
-               }
-            }
-         }
-      }
    }
    
    // Agregamos las primeras ciudades
