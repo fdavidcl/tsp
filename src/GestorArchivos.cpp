@@ -1,6 +1,6 @@
-#include "LectorArchivos.h"
+#include "GestorArchivos.h"
 
-Problema LectorArchivos::lee(char* nombre_archivo){
+Problema GestorArchivos::lee(char* nombre_archivo){
    int idCiudad,num_ciudades;
    double x,y;
    ifstream archi;
@@ -27,10 +27,20 @@ Problema LectorArchivos::lee(char* nombre_archivo){
    return Problema(conjunto_ciudades, num_ciudades);
 }
 
-bool LectorArchivos::comprueba_existencia(char* nombre) {
+bool GestorArchivos::comprueba_existencia(char* nombre) {
    ifstream archi(nombre);
    
    // El metodo good nos informa de la existencia del archivo
    return archi.good();
+}
+
+void GestorArchivos::escribe(const char* nombre_archivo, Recorrido& solucion) {
+   ofstream salida;
+   salida.open(nombre_archivo);
+   
+   salida << "# TSP: El problema del viajante de comercio" << endl;
+   salida << "# Utilice gentables.sh para generar tablas de resultados y graficos" << endl;
+   salida << "# Coste del recorrido: " << solucion.calcula_coste() << endl << "# Recorrido:" << endl;
+   salida << solucion << endl;
 }
 

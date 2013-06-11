@@ -5,6 +5,7 @@
 
 MAPAS=(small10 berlin52 eil101 KROA200 a280)
 OFILE="resultado.html"
+SCRIPT="script_`date +%s%N`.gnup"
 PROG="bin/tsp"
 HEUR="1
 2
@@ -35,9 +36,10 @@ printf "
             background: #555;
          }
          article {
-            width: 900px;
-            margin: 0 auto;
-            padding: 20px 20px 40px;
+            min-width: 900px;
+            max-width: 1900px;
+            margin: 0 40px;
+            padding: 20px 40px 40px;
             background: #f0f0f0;
             box-shadow: 0 0 40px rgba(0,0,0,0.3);
          }
@@ -63,7 +65,10 @@ printf "
             font-weight: bold;
          }
          td.best {
-            color: #0066aa;
+            background: #cfc;
+         }
+         td img {
+            max-width: 300px;
          }
       </style>
       <script>
@@ -94,7 +99,7 @@ printf "
                <td>Vecino m&aacute;s cercano</td>
                <td>Inserci&oacute;n m&aacute;s econ&oacute;mica</td>
                <td>Comparaci&oacute;n de coordenadas</td>
-            </td>" >> $OFILE
+            </tr>" >> $OFILE
 
 for MAP in ${MAPAS[*]}
 do
@@ -107,8 +112,26 @@ do
                <td>" >> $OFILE
       printf "Generando solución $H para el mapa $MAP"
       RESULT=`$PROG instancias/$MAP.tsp $H`
-      printf $RESULT >> $OFILE
+      printf "$RESULT <br />" >> $OFILE
       printf "   [ $RESULT ]\n"
+      
+      ARCH="instancias/$MAP.tsp.$H"
+      
+      printf 'set xlabel "Coordenada X"
+         set ylabel "Coordenada Y"
+         set title "Problema TSP : ".basename
+         unset key
+         set grid
+         set terminal png
+         set output basename.".png"
+         plot basename.".data" with linespoints' > $SCRIPT
+      
+      gnuplot -e "basename='$ARCH'" $SCRIPT && {
+         rm $SCRIPT;
+         echo "Gráfico generado en $ARCH.png"
+      } || echo "$0: gnuplot ha fallado."
+      
+      printf " <img src=\"$ARCH.png\" />" >> $OFILE
       printf "</td>" >> $OFILE
    done
    

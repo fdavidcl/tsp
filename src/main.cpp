@@ -8,8 +8,8 @@
 
 #include <stdlib.h>
 #include <iostream>
-#include <functional>
-#include "LectorArchivos.h"
+#include <string>
+#include "GestorArchivos.h"
 #include "Ciudad.h"
 #include "Recorrido.h"
 #include "Problema.h"
@@ -25,10 +25,10 @@ int main(int argc, char *argv[]){
 	if (argc > 2) {
 	   // Obtenemos los datos del archivo y creamos el objeto
 	   // de Problema
-	   LectorArchivos lector;
+	   GestorArchivos explorador;
 	   
-	   if (lector.comprueba_existencia(argv[1])) {
-	      Problema instancia(lector.lee(argv[1]));
+	   if (explorador.comprueba_existencia(argv[1])) {
+	      Problema instancia(explorador.lee(argv[1]));
 	      Heuristica estrategia;
 	      
    	   Estrategia soluciones[] = {&Heuristica::vecino_mas_cercano, &Heuristica::insercion, &Heuristica::suma};
@@ -40,12 +40,14 @@ int main(int argc, char *argv[]){
 	         Recorrido solucion((estrategia.*soluciones[a_usar - 1])(instancia));
 	         int num_ciudades = solucion.consulta_cantidad();
 	         
-	         // Mostramos por salida el camino y el coste asociado
-	         //cout << "# TSP: El problema del viajante de comercio" << endl;
-	         //cout << "# Utilice plot.sh para generar un grafico con la solucion" << endl << "# Recorrido:" << endl;
-	         //cout << solucion << endl;
-	         //cout << "# Coste del recorrido: " << solucion.calcula_coste() << endl;
+	         // Mostramos por salida el coste
 	         cout << solucion.calcula_coste() << endl;
+	         
+	         // Generamos un archivo con la solucion
+	         string nom_archivo = argv[1];
+	         ((nom_archivo += ".") += argv[2]) += ".data";
+	         
+	         explorador.escribe(nom_archivo.c_str(), solucion);
 	      }
 	      else {
 	         cout << argv[0] << ": No existe la heurística especificada. Códigos de heurística: 1, 2, 3." << endl;

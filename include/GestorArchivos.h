@@ -6,13 +6,14 @@
  * **Autores** Oscar Bermudez Garrido y Francisco David Charte Luque
  *********
  */
-#ifndef LECTORARCHIVOS
-#define LECTORARCHIVOS
+#ifndef GESTORARCHIVOS
+#define GESTORARCHIVOS
 #include <iostream>
 #include <fstream>
 #include <string>
 #include "Ciudad.h"
 #include "Problema.h"
+#include "Recorrido.h"
 
 using namespace std;
 
@@ -21,7 +22,7 @@ using namespace std;
  * Se encarga de extraer los datos necesarios de
  * un archivo y proporcionar un objeto de la clase Problema
  */
-class LectorArchivos {
+class GestorArchivos {
    /**
     * Array de punteros a objetos de Ciudad
     */
@@ -39,6 +40,8 @@ public:
     * @return Objeto de la clase Problema
     */
    Problema lee(char* nombre_archivo);
+   
+   void escribe(const char* nombre_archivo, Recorrido& solucion);
    
    /**
     * Este metodo trata de acceder a un archivo dado y devuelve true en
