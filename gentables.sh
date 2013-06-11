@@ -36,10 +36,10 @@ printf "
             background: #555;
          }
          article {
-            min-width: 1000px;
+            min-width: 900px;
             max-width: 1900px;
             margin: 0 40px;
-            padding: 20px 20px 40px;
+            padding: 20px 40px 40px;
             background: #f0f0f0;
             box-shadow: 0 0 40px rgba(0,0,0,0.3);
          }
@@ -101,19 +101,19 @@ printf "
                <td>Comparaci&oacute;n de coordenadas</td>
             </td>" >> $OFILE
 
-for MAP in $HEUR
+for MAP in ${MAPAS[*]}
 do
    printf "
             <tr>
                <td>$MAP</td>" >> $OFILE
    
-   for H in ${MAPAS[*]}; do
+   for H in $HEUR; do
       printf "
                <td>" >> $OFILE
       printf "Generando solución $H para el mapa $MAP"
       RESULT=`$PROG instancias/$MAP.tsp $H`
-      printf $RESULT >> $OFILE
-      printf "   [ $RESULT ]<br />\n"
+      printf "$RESULT <br />" >> $OFILE
+      printf "   [ $RESULT ]\n"
       
       ARCH="instancias/$MAP.tsp.$H"
       

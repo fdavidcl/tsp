@@ -256,7 +256,7 @@ Recorrido Heuristica::evolucion(Problema& a_resolver) {
    // Una generacion consta de g recorridos, y se realiza una
    // evolucion con e generaciones
    
-   /** Version 1: Vamos modificando solucion constantemente /
+   /** Version 1: Vamos modificando solucion constantemente **/
    for (int i = 0; i < e; i++) {
       Recorrido copia(intento);
       
@@ -275,7 +275,7 @@ Recorrido Heuristica::evolucion(Problema& a_resolver) {
       } else {
          intento = copia;
       }
-   }**/
+   }
    
    /** Version 2: modificamos solucion tras cada generacion /
    for (int i = 0; i < e; i++) {
@@ -295,7 +295,7 @@ Recorrido Heuristica::evolucion(Problema& a_resolver) {
       intento = solucion;
    }**/
    
-   /** Version 3: Tratamos de hacer mutaciones no aleatorias **/
+   /** Version 3: Tratamos de hacer mutaciones no aleatorias /
    for (int m = 0; m < e; m++) {
       for (int i = 0; i < num_ciudades; i++) {
          for (int j = 0; j < num_ciudades; j++) {
@@ -308,7 +308,7 @@ Recorrido Heuristica::evolucion(Problema& a_resolver) {
             }
          }
       }
-   }
+   }*/
    
    return solucion;
 }
@@ -408,84 +408,3 @@ Recorrido Heuristica::suma(Problema& a_resolver) {
    return mejor_solucion;
 }
 
-
-
-Recorrido Heuristica::vecino_por_zonas(Problema& a_resolver) {
-   int num_ciudades = a_resolver.consulta_cantidad(),
-      ciudades_abajo,
-      ciudades_arriba;
-   double mas_baja = -1,
-      mas_alta = -1,
-      menor_coste = -1;
-   int proxima;
-   double a, b, x, y;
-   
-   bool* visitadas = new bool[num_ciudades];
-   
-   Ciudad** extremos = new Ciudad* [2];
-   
-   double* sumas = new double[num_ciudades];
-   
-   Recorrido solucion, abajo, arriba;
-   
-   for (int i = 0; i < num_ciudades; i++) {
-      x = a_resolver[i]->consulta_x();
-      y = a_resolver[i]->consulta_y();
-      sumas[i] = prm * (x + y) * (y / x) - (5 - prm) * (x - y) * (x / y);
-      visitadas[i] = false;
-      
-      if (sumas[i] < mas_baja || mas_baja < 0) {
-         mas_baja = sumas[i];
-         extremos[0] = a_resolver[i];
-      }
-      
-      if (sumas[i] > mas_alta || mas_alta < 0) {
-         mas_alta = sumas[i];
-         extremos[1] = a_resolver[i];
-      }
-   }
-   
-   // Calculamos los coeficientes de la recta y = ax+b
-   a = (extremos[1]->consulta_y() - extremos[0]->consulta_y())/(extremos[1]->consulta_x() - extremos[0]->consulta_x());
-   b = extremos[0]->consulta_y() - extremos[0]->consulta_x() * a;
-   
-   Recorrido intento;
-   
-   ultima_visitada = k;
-   
-   // Inicializamos visitadas a falso
-   for (int i = 0; i < num_ciudades; i++) {
-      visitadas[i] = false;
-   }
-   
-   // Agregamos la primera ciudad
-   intento += a_resolver[k];
-   visitadas[k] = true;
-   
-   // Para cada ciudad agregada, buscamos la mas cercana
-   // de entre las no visitadas y la agregamos al recorrido
-   for (int i = 1; i < num_ciudades; i++) {
-      min_distancia = -1;
-      
-      for (int j = 0; j < num_ciudades; j++) {
-         if (visitadas[j] == false && (min_distancia < 0 || a_resolver.obten_distancia(ultima_visitada, j) < min_distancia)) {
-            min_distancia = a_resolver.obten_distancia(ultima_visitada, j);
-            mas_cercana = j;
-         }
-      }
-      
-      intento += a_resolver[mas_cercana];
-      visitadas[mas_cercana] = 1;
-      ultima_visitada = mas_cercana;
-   }
-   
-   // Volvemos a la primera ciudad
-   intento += a_resolver[k];
-      
-   
-   delete[] visitadas;
-   delete[] sumas;
-   delete[] extremos;
-   
-   return mejor_solucion;
-}
