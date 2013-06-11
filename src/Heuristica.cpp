@@ -103,6 +103,8 @@ Recorrido Heuristica::vecino_mas_cercano(Problema& a_resolver) {
 Recorrido Heuristica::insercion(Problema &a_resolver) {
    int num_ciudades = a_resolver.consulta_cantidad();
    int mas_oeste = 0, mas_este = 0, mas_norte = 0;
+   /*int mas_noroeste = 0, mas_noreste = 0, mas_sur = 0;
+   double a, b;*/
    int mejor_ciudad, mejor_posicion;
    double min_dist= -1, dist_intento;
    bool *visitadas = new bool[num_ciudades];
@@ -114,6 +116,24 @@ Recorrido Heuristica::insercion(Problema &a_resolver) {
    for (int i = 0; i < num_ciudades; i++) {
       visitadas[i] = false;      
 
+      
+      /*if((a_resolver[i]->consulta_x()/(a_resolver[i]->consulta_y()+1)) < a)
+         mas_noroeste = i;
+         a = a_resolver[i]->consulta_x()/(a_resolver[i]->consulta_y()+1);
+      if(pow(a_resolver[i]->consulta_x(),2)+pow(a_resolver[i]->consulta_y(),2) < b)
+         mas_noreste = i;
+         b = (a_resolver[i]->consulta_x(),2)+pow(a_resolver[i]->consulta_y(),2);
+      if(a_resolver[i]->consulta_y() > a_resolver[mas_sur]->consulta_y())
+         mas_sur = i;
+
+      // Agregamos las primeras ciudades(la mas al norte, la mas al este y la mas al oeste)
+      solucion += a_resolver[mas_noroeste];
+      solucion += a_resolver[mas_noreste];
+      solucion += a_resolver[mas_sur];
+      visitadas[mas_noroeste] = true;
+      visitadas[mas_noreste] = true;
+      visitadas[mas_sur] = true;
+*/
       if(a_resolver[i]->consulta_x() < a_resolver[mas_oeste]->consulta_x())
          mas_oeste = i;
       if(a_resolver[i]->consulta_x() > a_resolver[mas_este]->consulta_x())
