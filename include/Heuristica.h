@@ -39,6 +39,15 @@ class Heuristica {
 
    //Recorrido vecino_mas_cercano_desde(int indice);
 
+   /**
+    * Este metodo toma el objeto de la clase Problema, y un recorrido
+    * incompleto (y las ciudades visitadas) y devuelve la
+    * mejor solucion obtenida por la estrategia de insercion
+    * @param *a_resolver Puntero a un Problema
+    * @param *a_resolver Recorrido que no pasa por todas las ciudades
+    * @param *visitadas Puntero a las ciudades ya visitadas
+    * @return Recorrido que soluciona el problema
+    */
    Recorrido insercion_completa(Problema &a_resolver, Recorrido parcial, bool *visitadas);
    
    Recorrido& genera_recorrido_aleatorio(Problema&);
@@ -53,6 +62,12 @@ public:
     */
    Recorrido vecino_mas_cercano(Problema& a_resolver);
 
+   /**
+    * Este metodo toma el objeto de la clase Problema y devuelve la
+    * mejor solucion obtenida por la estrategia de insercion
+    * @param *a_resolver Puntero a un Problema
+    * @return Recorrido que soluciona el problema
+    */
    Recorrido insercion(Problema &a_resolver);
 
    Recorrido evolucion(Problema& a_resolver);
