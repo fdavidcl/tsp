@@ -5,10 +5,8 @@ LIB=./lib
 OBJ=./obj
 SRC=./src
 
-all: $(OBJ)/Aleatorio.o $(OBJ)/Ciudad.o $(OBJ)/Heuristica.o $(OBJ)/LectorArchivos.o $(OBJ)/main.o $(OBJ)/Problema.o $(OBJ)/Recorrido.o
+all: $(OBJ)/Ciudad.o $(OBJ)/Heuristica.o $(OBJ)/LectorArchivos.o $(OBJ)/main.o $(OBJ)/Problema.o $(OBJ)/Recorrido.o
 	g++ -o $(BIN)/tsp $^ && cat README
-$(OBJ)/Aleatorio.o: $(SRC)/Aleatorio.cpp $(INCLUDE)/Aleatorio.h
-	g++ -o $@ -c $< -I$(INCLUDE)
 $(OBJ)/Ciudad.o: $(SRC)/Ciudad.cpp $(INCLUDE)/Ciudad.h
 	g++ -o $@ -c $< -I$(INCLUDE)
 $(OBJ)/Heuristica.o: $(SRC)/Heuristica.cpp $(INCLUDE)/Heuristica.h
@@ -23,5 +21,5 @@ $(OBJ)/Recorrido.o: $(SRC)/Recorrido.cpp $(INCLUDE)/Recorrido.h
 	g++ -o $@ -c $< -I$(INCLUDE)
 clean:
 	rm $(OBJ)/*.o
-doc:
+documentacion:
 	doxygen $(DOC)/doxys/Doxyfile
