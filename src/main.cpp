@@ -41,10 +41,11 @@ int main(int argc, char *argv[]){
 	         int num_ciudades = solucion.consulta_cantidad();
 	         
 	         // Mostramos por salida el camino y el coste asociado
-	         cout << "# TSP: El problema del viajante de comercio" << endl;
-	         cout << "# Utilice plot.sh para generar un grafico con la solucion" << endl << "# Recorrido:" << endl;
-	         cout << solucion << endl;
-	         cout << "# Coste del recorrido: " << solucion.calcula_coste() << endl;
+	         //cout << "# TSP: El problema del viajante de comercio" << endl;
+	         //cout << "# Utilice plot.sh para generar un grafico con la solucion" << endl << "# Recorrido:" << endl;
+	         //cout << solucion << endl;
+	         //cout << "# Coste del recorrido: " << solucion.calcula_coste() << endl;
+	         cout << solucion.calcula_coste() << endl;
 	      }
 	      else {
 	         cout << argv[0] << ": No existe la heurística especificada. Códigos de heurística: 1, 2, 3." << endl;

@@ -112,13 +112,19 @@ Recorrido& Recorrido::insertar(Ciudad* nueva, int indice) {
    delete[] camino;
    camino = nuevo_camino;
    
-   cantidad++;
-   
-   distancia_recorrida = 0;
-   
-   for (int i = 0; i < cantidad - 1; i++) {
-      distancia_recorrida += camino[i]->calcula_distancia_con(camino[i+1]);
+   if (cantidad > 0) {
+      if (indice == cantidad) {
+         distancia_recorrida += camino[indice-1]->calcula_distancia_con(camino[indice]);
+      } else if (indice > 0) {
+         distancia_recorrida += camino[indice-1]->calcula_distancia_con(camino[indice])
+            + camino[indice+1]->calcula_distancia_con(camino[indice])
+            - camino[indice-1]->calcula_distancia_con(camino[indice+1]);
+      } else {
+         distancia_recorrida += camino[indice+1]->calcula_distancia_con(camino[indice]);
+      }
    }
+   
+   cantidad++;
    
    return *this;
 }
@@ -144,7 +150,7 @@ Recorrido& Recorrido::intercambiar(int ind1, int ind2) {
    
    return *this;
 }
-
+/*
 Recorrido& Recorrido::transferir(int a_cambiar, int ind_nuevo) {
    if (a_cambiar < cantidad && ind_nuevo < cantidad) {
       insertar(camino[a_cambiar], ind_nuevo+1);
@@ -152,7 +158,7 @@ Recorrido& Recorrido::transferir(int a_cambiar, int ind_nuevo) {
    }
    
    return *this;
-}
+}*/
 
 Ciudad* Recorrido::operator[](int indice) const {
    return camino[indice];

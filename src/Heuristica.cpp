@@ -1,4 +1,4 @@
-#include "Heuristica.h"
+   #include "Heuristica.h"
 
 /*Recorrido Heuristica::vecino_mas_cercano_desde(int indice) {
    Recorrido intento;
@@ -137,7 +137,7 @@ Recorrido Heuristica::insercion(Problema &a_resolver) {
    visitadas[mas_norte] = true;
 
    // Buscamos las mejores ciudades y sus mejores posiciones para añadirlas al recorrido
-   while(solucion.consulta_cantidad()-1 < num_ciudades){
+   for(int k = solucion.consulta_cantidad(); k < num_ciudades; k++){
       min_dist = -1;
 
       //Podría ir como un método o dos, distintos
@@ -293,89 +293,97 @@ Recorrido Heuristica::evolucion(Problema& a_resolver) {
    return solucion;
 }
 
-// TODO: Añadir ponderación (por proporción entre x e y)
-
 Recorrido Heuristica::suma(Problema& a_resolver) {
-   Recorrido solucion, abajo, arriba;
+   Recorrido mejor_solucion;
    int num_ciudades = a_resolver.consulta_cantidad(),
       ciudades_abajo,
       ciudades_arriba;
-   double ultima_suma = 0, suma;
-   double mas_baja = -1;
-   Ciudad* proxima;
-   double a, b;
+   double mas_baja = -1,
+      mas_alta = -1,
+      menor_coste = -1;
+   int proxima;
+   double a, b, x, y;
+   
+   bool* visitadas = new bool[num_ciudades];
    
    Ciudad** extremos = new Ciudad* [2];
-   double mas_alta = -1;
    
-   for (int i = 0; i < num_ciudades; i++) {
-      suma = a_resolver[i]->consulta_x() + a_resolver[i]->consulta_y();
-      
-      if (suma < mas_baja || mas_baja < 0) {
-         mas_baja = suma;
-         extremos[0] = a_resolver[i];
-      }
-      
-      if (suma > mas_alta || mas_alta < 0) {
-         mas_alta = suma;
-         extremos[1] = a_resolver[i];
-      }
-   }
+   double* sumas = new double[num_ciudades];
    
-   // Calculamos los coeficientes de la recta y = ax+b
-   a = (extremos[1]->consulta_y() - extremos[0]->consulta_y())/(extremos[1]->consulta_x() - extremos[0]->consulta_x());
-   b = extremos[0]->consulta_y() - extremos[0]->consulta_x() * a;
-   
-   for (int k = 0; k < num_ciudades; k++) {
-      mas_baja = -1;
+   for (double prm = 0; prm <= 5; prm += 0.1) {
+      Recorrido solucion, abajo, arriba;
       
       for (int i = 0; i < num_ciudades; i++) {
-         suma = a_resolver[i]->consulta_x() + a_resolver[i]->consulta_y();
+         x = a_resolver[i]->consulta_x();
+         y = a_resolver[i]->consulta_y();
+         sumas[i] = prm * (x + y) * (y / x) - (5 - prm) * (x - y) * (x / y);
+         visitadas[i] = false;
          
-         /*std::cout << (mas_baja < 0);
-         std::cout << (suma < mas_baja);
-         std::cout << (suma > ultima_suma);*/
-         
-         if (suma > ultima_suma && (mas_baja < 0 || suma < mas_baja)) {
-            mas_baja = suma;
-            proxima = a_resolver[i];
-            
-            //std::cout << "Cambiamos proxima" << std::endl;
+         if (sumas[i] < mas_baja || mas_baja < 0) {
+            mas_baja = sumas[i];
+            extremos[0] = a_resolver[i];
          }
          
+         if (sumas[i] > mas_alta || mas_alta < 0) {
+            mas_alta = sumas[i];
+            extremos[1] = a_resolver[i];
+         }
       }
       
-      //std::cout << "Añadimos ciudad " << proxima << std::endl;
+      // Calculamos los coeficientes de la recta y = ax+b
+      a = (extremos[1]->consulta_y() - extremos[0]->consulta_y())/(extremos[1]->consulta_x() - extremos[0]->consulta_x());
+      b = extremos[0]->consulta_y() - extremos[0]->consulta_x() * a;
       
-      ultima_suma = mas_baja;
+      for (int k = 0; k < num_ciudades; k++) {
+         mas_baja = -1;
+         
+         for (int i = 0; i < num_ciudades; i++) {
+            if (!visitadas[i] && (sumas[i] <= mas_baja || mas_baja < 0)) {
+               mas_baja = sumas[i];
+               proxima = i;
+            }
+         }
+         
+         if (a_resolver[proxima]->consulta_y() <= a*a_resolver[proxima]->consulta_x()+b) {
+            abajo += a_resolver[proxima];
+         } else {
+            arriba += a_resolver[proxima];
+         }
+         
+         visitadas[proxima] = true;
+      }
       
-      if (proxima->consulta_y() <= a*proxima->consulta_x()+b) {
-         abajo += proxima;
-      } else {
-         arriba += proxima;
+      ciudades_abajo = abajo.consulta_cantidad();
+      ciudades_arriba = arriba.consulta_cantidad();
+      
+      //std::cout << num_ciudades << " " << ciudades_abajo + ciudades_arriba << std::endl;
+      
+      //std::cout << "ABAJO" << std::endl;
+      for (int i = 0; i < ciudades_abajo; i++) {
+         solucion += abajo[i];
+         //std::cout << abajo[i]->consulta_x() << " " << abajo[i]->consulta_y() << "  ";
+      }
+      
+      //std::cout << "ARRIBA" << std::endl;
+      
+      for (int i = 0; i < ciudades_arriba; i++) {
+         solucion += arriba[ciudades_arriba - i - 1];
+         //std::cout << arriba[ciudades_arriba - i - 1]->consulta_x() << " " << arriba[ciudades_arriba - i - 1]->consulta_y() << "  ";
+      }
+      
+      solucion += extremos[0];
+      
+      //std::cout << solucion.calcula_coste() << std::endl;
+      
+      if (solucion.calcula_coste() < menor_coste || menor_coste < 0) {
+         menor_coste = solucion.calcula_coste();
+         mejor_solucion = solucion;
       }
    }
    
-   ciudades_abajo = abajo.consulta_cantidad();
-   ciudades_arriba = arriba.consulta_cantidad();
+   delete[] visitadas;
+   delete[] sumas;
+   delete[] extremos;
    
-   std::cout << num_ciudades << std::endl;
-   
-   std::cout << "ABAJO" << std::endl;
-   for (int i = 0; i < ciudades_abajo; i++) {
-      solucion += abajo[i];
-      std::cout << abajo[i]->consulta_x() << " " << abajo[i]->consulta_y() << "  ";
-   }
-   
-   std::cout << "ARRIBA" << std::endl;
-   
-   for (int i = 0; i < ciudades_arriba; i++) {
-      solucion += arriba[ciudades_arriba - i - 1];
-      std::cout << arriba[ciudades_arriba - i - 1]->consulta_x() << " " << arriba[ciudades_arriba - i - 1]->consulta_y() << "  ";
-   }
-   
-   solucion += extremos[0];
-   
-   return solucion;
-   
+   return mejor_solucion;
 }
