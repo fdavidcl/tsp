@@ -3,8 +3,8 @@
 # Descripcion: Genera tablas de resultados en formato HTML
 # Autores: Oscar Bermudez y F. David Charte
 
-MAPAS=(small10 berlin52 eil101 KROA200 a280)
-OFILE="resultado.html"
+MAPAS=(small10 berlin52 eil101 KROA200 a280 pr1002)
+OFILE="tablas.html"
 SCRIPT="script_`date +%s%N`.gnup"
 PROG="bin/tsp"
 HEUR="1
@@ -21,9 +21,6 @@ HEUR="1
    exit -2
 }
 
-[[ -f $OFILE ]] && printf "" > $OFILE
-touch $OFILE
-
 printf "
 <!DOCTYPE html>
 <html>
@@ -36,16 +33,21 @@ printf "
             background: #555;
          }
          article {
-            min-width: 900px;
+            min-width: 1100px;
             max-width: 1900px;
-            margin: 0 40px;
+            margin: 0 60px;
             padding: 20px 40px 40px;
             background: #f0f0f0;
             box-shadow: 0 0 40px rgba(0,0,0,0.3);
          }
+         h2 {
+            text-align: center;
+            font-weight: normal;
+         }
          table {
             border-collapse: collapse;
             border: 2px solid silver;
+            margin: 0 auto;
          }
          tr {
             border: 1px solid #c0c0c0;
@@ -63,12 +65,24 @@ printf "
          }
          td:first-child {
             font-weight: bold;
+            border: 1px solid #c0c0c0;
          }
          td.best {
-            background: #cfc;
+            background: #aeb;
          }
          td img {
             max-width: 300px;
+         }
+         .coste:before, .tiempo:before {
+            content: 'Coste';
+            text-transform: uppercase;
+            color: #888;
+            font-size: 12px;
+            margin-right: .4em;
+         }
+         .tiempo:before {
+            content: 'Tiempo';
+            margin-left: .6em;
          }
       </style>
       <script>
@@ -76,8 +90,8 @@ printf "
             var rows = document.querySelectorAll('table tr');
             
             for (var i = 1; i < rows.length; i++) {
-               var cells = rows[i].querySelectorAll('td');
-               var best = 1;
+               var cells = rows[i].querySelectorAll('td .coste');
+               var best = 0;
                
                for (var j = 1; j < cells.length; j++) {
                   if (parseFloat(cells[j].textContent) < parseFloat(cells[best].textContent)) {
@@ -85,7 +99,7 @@ printf "
                   }
                }
                
-               cells[best].classList.add('best');
+               cells[best].parentNode.classList.add('best');
             }
          };
       </script>
@@ -99,7 +113,7 @@ printf "
                <td>Vecino m&aacute;s cercano</td>
                <td>Inserci&oacute;n m&aacute;s econ&oacute;mica</td>
                <td>Comparaci&oacute;n de coordenadas</td>
-            </tr>" >> $OFILE
+            </tr>" > $OFILE
 
 for MAP in ${MAPAS[*]}
 do
@@ -111,15 +125,16 @@ do
       printf "
                <td>" >> $OFILE
       printf "Generando solución $H para el mapa $MAP"
+      TIMEB=`date +"%s.%N"`
       RESULT=`$PROG instancias/$MAP.tsp $H`
-      printf "$RESULT <br />" >> $OFILE
+      TIME=`echo "\`date +\"%s.%N\"\` - $TIMEB" | bc | cut -c-7`
+      printf "<span class='coste'>$RESULT</span> <span class='tiempo'>$TIME</span> <br />" >> $OFILE
       printf "   [ $RESULT ]\n"
       
       ARCH="instancias/$MAP.tsp.$H"
       
       printf 'set xlabel "Coordenada X"
          set ylabel "Coordenada Y"
-         set title "Problema TSP : ".basename
          unset key
          set grid
          set terminal png
@@ -144,4 +159,5 @@ printf "
    </body>
 </html>" >> $OFILE
 
+echo "Terminada la generación. Abriendo el archivo $OFILE"
 (xdg-open $OFILE &> /dev/null)&
