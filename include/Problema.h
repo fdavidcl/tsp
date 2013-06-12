@@ -1,5 +1,5 @@
 /**
- * ## El problema del viajante de comercio (TSP)
+ * ## El problema del viajante de comercio (TSP) ampliado
  *********
  * **Asignatura** Metodologia de la Programacion (1º DGIIM)
  *********

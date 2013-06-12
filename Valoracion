@@ -1,0 +1,44 @@
+Práctica: Problema del Viajante de Comercio(TSP) Ampliado
+Asignatura: Metodología de la Programación (1º DGIIM)
+Autores: Óscar Bermúdez Garrido y Francisco David Charte Luque
+
+Como ya habíamos realizado una heurística(la de vecino más cercano), ya teníamos la estructura básica del problema,
+esto es, la mayor parte de la implementación de las clases Recorrido, Problema, Ciudad y parte de GectorArchivos
+(antes conocido como LectorArchivos), así como el makefile y el doxygen.
+
+Aún así, hubo que añadir los destructores, ya que antes no sabíamos cómo hacerlos. Así como algunos métodos que no se
+implementaron antes porque vecino más cercano no los necesitaba pero que otra heurística, sí. Un claro ejemplo es el
+método de insertar una ciudad entre otras dos, sin el que no se podría realizar de forma eficiente el método de inserción.
+También substituimos algunos métodos por sobrecargas de operadores (como "+", "+=", "[]",...), ya que dicha sustitución
+reduce considerablemente la longitud del código, además de una comprensión más rápida e intuitiva de dicho código (ya
+que se realizo una sobrecarga adecuada de los operadores).
+
+Sin embargo, el main y GestorArchivos sí experimentaron bastantes cambios. Al main se le pasaron más argumentos (para
+determinar que heurística utilizar, ya que antes sólo había una), y se cambió lo que debía mostrar (antes se mostraban
+el orden que tenía para pasar por las ciudades, ahora sólo muestra el coste) y cómo (ahora se hace a través de
+GestorArchivos para guardarlo en un fichero). Por su parte, GectorArchivos paso a poder escribir en un archivo (antes
+sólo leerlos).
+
+Para la heurística de inserción, había que buscar tres ciudades, prácticamente arbitrarias, que añadiríamos al recorrido
+y luego se busca qué ciudad y en qué posición se añadiría a nuestro camino. La última parte del método es la menos
+eficiente, ya que tendría que recorrer todas las ciudades no agregadas y buscar entre qué dos ciudades agregadas sería
+mejor insertarla; y a la vez la que menos quebraderos de cabeza da, puesto que no hay muchas formas de buscarla. La parte
+de la elección de las primeras ciudades es la que más hay que reflexionar porque el recorrido varía mucho si se elijen
+unos puntos de si se eligen otros (como comprobamos experimentalmente). Las mejores ideas fueron:
+
+   Las primeras ciudades que escogimos fueron las que estaban más al oeste, más al este y más al norte (evitando que la que
+   se escogiese como la más al norte fuese distinta delas otras). Éstas nos daban unos resultados aproximados a los recibidos
+   en la heurística de vecino más cercano(en ocasiones algo peores, y en otras mejores).
+
+   Después, probamos con las que estaban más al noreste, la más al noroeste y la más al sur. Los resultados fueron malísimos
+   en todas excepto en una ciudad, que mejoraron al recorrido dado por las ciudades iniciales anteriores pero era peor que
+   vecino más cercano. Por tanto, despreciamos rápidamente este conjunto de ciudades.
+
+   Por último, buscamos las que estaban más alejadas entre ellas. En este caso, obtuvimos pequeñas mejoras respecto del primer
+   conjunto de ciudades en la mitad de ciudades pero muy malos recorridos en el resto. Finalmente, acabamos ignorando también
+   este conjunto.
+Una pequeña anécdota fue que cuando no teníamos más ideas medianamente sensatas sobre cómo escoger dichas ciudades, empezamos
+a probar un par de criterios casi aleatorios. encontramos que si inicialmente añadíamos las tres primeras ciudades(0, 1, 2),
+nos salieron los mejores recorridos que llegamos a encontrar. Como eso fue una casualidad de nuestras instancias, obviamente
+no podíamos dejarlo, ya que posiblemente diese recorridos malísimos en otras instancias
+
