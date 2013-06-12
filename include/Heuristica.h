@@ -8,11 +8,8 @@
  */
 #ifndef HEURISTICA
 #define HEURISTICA
-#include <ctime>
-#include <cstdlib>
 #include "Recorrido.h"
 #include "Problema.h"
-#include <iostream>
 
 /**
  * ### Clase Heuristica
@@ -30,28 +27,15 @@ class Heuristica {
    Problema* a_resolver;
    
    /**
-    * Este metodo obtiene el recorrido para, empezando por una ciudad
-    * dada y pasando por la ciudad mas cercana (no visitada) en cada
-    * paso, pasar por todas las ciudades y volver a la ciudad de inicio
-    * @param indice Indice de la ciudad de inicio
-    * @return Objeto de Recorrido que se ha construido
-    */ 
-
-   //Recorrido vecino_mas_cercano_desde(int indice);
-
-   /**
     * Este metodo toma el objeto de la clase Problema, y un recorrido
     * incompleto (y las ciudades visitadas) y devuelve la
     * mejor solucion obtenida por la estrategia de insercion
     * @param *a_resolver Puntero a un Problema
-    * @param *a_resolver Recorrido que no pasa por todas las ciudades
+    * @param parcial Recorrido que no pasa por todas las ciudades
     * @param *visitadas Puntero a las ciudades ya visitadas
     * @return Recorrido que soluciona el problema
     */
    Recorrido insercion_completa(Problema &a_resolver, Recorrido parcial, bool *visitadas);
-   
-   Recorrido& genera_recorrido_aleatorio(Problema&);
-   //Recorrido genera_mutacion(Recorrido& actual);
 
 public:
    /**
@@ -69,10 +53,16 @@ public:
     * @return Recorrido que soluciona el problema
     */
    Recorrido insercion(Problema &a_resolver);
-
-   Recorrido evolucion(Problema& a_resolver);
    
-   Recorrido suma(Problema& a_resolver);
+   /**
+    * Esta heuristica trata de generar un camino lo mas adecuado
+    * posible simplemente realizando operaciones aritmeticas y de
+    * comparacion sobre las coordenadas de cada nodo (ciudad) a
+    * visitar.
+    * @param *a_resolver Puntero a un Problema
+    * @return Recorrido que soluciona el problema
+    */
+   Recorrido comparacion(Problema& a_resolver);
 };
 
 #endif

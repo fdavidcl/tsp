@@ -41,6 +41,12 @@ public:
     */
    Problema lee(char* nombre_archivo);
    
+   /**
+    * Metodo que crea un archivo y escribe sobre el los datos del recorrido
+    * pasado como argumento
+    * @param nombre_archivo Nombre del archivo a generar
+    * @param solucion Recorrido a escribir
+    */
    void escribe(const char* nombre_archivo, Recorrido& solucion);
    
    /**

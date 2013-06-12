@@ -35,9 +35,11 @@ bool GestorArchivos::comprueba_existencia(char* nombre) {
 }
 
 void GestorArchivos::escribe(const char* nombre_archivo, Recorrido& solucion) {
+   // Abrimos el archivo
    ofstream salida;
    salida.open(nombre_archivo);
    
+   // Guardamos los datos del recorrido: coste y coordenadas
    salida << "# TSP: El problema del viajante de comercio" << endl;
    salida << "# Utilice gentables.sh para generar tablas de resultados y graficos" << endl;
    salida << "# Coste del recorrido: " << solucion.calcula_coste() << endl << "# Recorrido:" << endl;

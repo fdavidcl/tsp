@@ -17,7 +17,7 @@
 
 using namespace std;
 
-typedef Recorrido (Heuristica::*Estrategia)(Problema& a_resolver);
+typedef Recorrido (Heuristica::*MisHeuristicas)(Problema& a_resolver);
 
 int main(int argc, char *argv[]){
    // Comprobamos que se han introducido dos argumentos,
@@ -31,13 +31,14 @@ int main(int argc, char *argv[]){
 	      Problema instancia(explorador.lee(argv[1]));
 	      Heuristica estrategia;
 	      
-   	   Estrategia soluciones[] = {&Heuristica::vecino_mas_cercano, &Heuristica::insercion, &Heuristica::suma};
+	      // Almacenamos todas las estrategias disponibles
+   	   MisHeuristicas soluciones[] = {&Heuristica::vecino_mas_cercano, &Heuristica::insercion, &Heuristica::comparacion};
    	   int a_usar = atoi(argv[2]);
    	   
    	   if (a_usar > 0 && a_usar < 4) {
 	         // Creamos un objeto de Recorrido a partir de la solucion
 	         // que proporcione el objeto de Heuristica
-	         Recorrido solucion((estrategia.*soluciones[a_usar - 1])(instancia));
+	         Recorrido solucion = (estrategia.*soluciones[a_usar - 1])(instancia);
 	         int num_ciudades = solucion.consulta_cantidad();
 	         
 	         // Mostramos por salida el coste

@@ -3,14 +3,16 @@
 # Descripcion: Genera tablas de resultados en formato HTML
 # Autores: Oscar Bermudez y F. David Charte
 
+# Declaramos las variables
 MAPAS=(small10 berlin52 eil101 KROA200 a280 pr1002)
 OFILE="tablas.html"
 SCRIPT="script_`date +%s%N`.gnup"
-PROG="bin/tsp"
+PROG="bin/tspAmpliado"
 HEUR="1
 2
 3"
 
+# Comprobamos que existe el programa y las instancias
 [[ -d instancias ]] || {
    echo "$0: No se encuentra el directorio instancias/. Abortando."
    exit -1
@@ -21,6 +23,7 @@ HEUR="1
    exit -2
 }
 
+# Preparamos el documento HTML
 printf "
 <!DOCTYPE html>
 <html>
@@ -115,6 +118,8 @@ printf "
                <td>Comparaci&oacute;n de coordenadas</td>
             </tr>" > $OFILE
 
+# Ejecutamos cada heuristica sobre cada mapa, generando
+# el codigo HTML adecuado
 for MAP in ${MAPAS[*]}
 do
    printf "
@@ -129,8 +134,9 @@ do
       RESULT=`$PROG instancias/$MAP.tsp $H`
       TIME=`echo "\`date +\"%s.%N\"\` - $TIMEB" | bc | cut -c-7`
       printf "<span class='coste'>$RESULT</span> <span class='tiempo'>$TIME</span> <br />" >> $OFILE
-      printf "   [ $RESULT ]\n"
+      printf "   [ $RESULT / $TIME ]\n"
       
+      # Generamos el grafico con gnuplot
       ARCH="instancias/$MAP.tsp.$H"
       
       printf 'set xlabel "Coordenada X"

@@ -6,7 +6,7 @@ OBJ=./obj
 SRC=./src
 
 all: $(OBJ)/Ciudad.o $(OBJ)/GestorArchivos.o $(OBJ)/Heuristica.o $(OBJ)/main.o $(OBJ)/Problema.o $(OBJ)/Recorrido.o
-	g++ -o $(BIN)/tsp $^ && cat README
+	g++ -o $(BIN)/tspAmpliado $^ && cat README
 $(OBJ)/Ciudad.o: $(SRC)/Ciudad.cpp $(INCLUDE)/Ciudad.h
 	g++ -o $@ -c $< -I$(INCLUDE)
 $(OBJ)/GestorArchivos.o: $(SRC)/GestorArchivos.cpp $(INCLUDE)/GestorArchivos.h

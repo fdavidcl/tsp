@@ -43,6 +43,11 @@ public:
     */
    Recorrido();
    
+   /**
+    * El constructor de copia genera un recorrido identico
+    * al recibido
+    * @param a_copiar Recorrido a copiar
+    */
    Recorrido(const Recorrido& a_copiar);
    
    /**
@@ -57,7 +62,8 @@ public:
    /**
     * Sobrecarga del operador = que permite asignar un Recorrido
     * al actual
-    * @param a_asignar Recorrido a asignar
+    * @param a_asignar Recorrido a copiar
+    * @return Referencia al Recorrido resultado
     */
    Recorrido& operator=(Recorrido& a_asignar);
    
@@ -65,14 +71,18 @@ public:
     * Sobrecarga del operador += que permite agregar una nueva
     * Ciudad al Recorrido actual modificando el actual
     * @param nueva Ciudad a agregar
+    * @return Referencia al Recorrido resultado
     */
    Recorrido& operator+=(Ciudad* nueva);
    
+   /**
+    * Metodo que inserta un puntero a una Ciudad en la posicion
+    * especificada
+    * @param nueva Ciudad a agregar
+    * @param indice Posicion en la que se quiere insertar
+    * @return Referencia al Recorrido resultado
+    */
    Recorrido& insertar(Ciudad* nueva, int indice);
-   
-   Recorrido& intercambiar(int, int);
-   
-   Recorrido& borrar(int);
    
    /**
     * Metodo que devuelve un puntero a un objeto de

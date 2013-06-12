@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>TSP: Tablas de resultados</title>
+      <style>
+         body {
+            margin: 0;
+            font-family: sans-serif;
+            background: #555;
+         }
+         article {
+            min-width: 1100px;
+            max-width: 1900px;
+            margin: 0 60px;
+            padding: 20px 40px 40px;
+            background: #f0f0f0;
+            box-shadow: 0 0 40px rgba(0,0,0,0.3);
+         }
+         h2 {
+            text-align: center;
+            font-weight: normal;
+         }
+         table {
+            border-collapse: collapse;
+            border: 2px solid silver;
+            margin: 0 auto;
+         }
+         tr {
+            border: 1px solid #c0c0c0;
+         }
+         tr:first-child {
+            font-weight: bold;
+            color: #555;
+         }
+         td {
+            padding: 3px 6px;
+            min-width: 100px;
+         }
+         tr:first-child td {
+            border: 1px solid #c0c0c0;
+         }
+         td:first-child {
+            font-weight: bold;
+            border: 1px solid #c0c0c0;
+         }
+         td.best {
+            background: #aeb;
+         }
+         td img {
+            max-width: 300px;
+         }
+         .coste:before, .tiempo:before {
+            content: 'Coste';
+            text-transform: uppercase;
+            color: #888;
+            font-size: 12px;
+            margin-right: .4em;
+         }
+         .tiempo:before {
+            content: 'Tiempo';
+            margin-left: .6em;
+         }
+      </style>
+      <script>
+         window.onload = function() {
+            var rows = document.querySelectorAll('table tr');
+            
+            for (var i = 1; i < rows.length; i++) {
+               var cells = rows[i].querySelectorAll('td .coste');
+               var best = 0;
+               
+               for (var j = 1; j < cells.length; j++) {
+                  if (parseFloat(cells[j].textContent) < parseFloat(cells[best].textContent)) {
+                     best = j;
+                  }
+               }
+               
+               cells[best].parentNode.classList.add('best');
+            }
+         };
+      </script>
+   </head>
+   <body>
+      <article>
+         <h2>TSP: Tablas de resultados</h2>
+         <table>
+            <tr>
+               <td>Mapas</td>
+               <td>Vecino m&aacute;s cercano</td>
+               <td>Inserci&oacute;n m&aacute;s econ&oacute;mica</td>
+               <td>Comparaci&oacute;n de coordenadas</td>
+            </tr>
+            <tr>
+               <td>small10</td>
+               <td><span class='coste'>3256.13</span> <span class='tiempo'>.005736</span> <br /> <img src="instancias/small10.tsp.1.png" /></td>
+               <td><span class='coste'>2839.94</span> <span class='tiempo'>.005458</span> <br /> <img src="instancias/small10.tsp.2.png" /></td>
+               <td><span class='coste'>2826.5</span> <span class='tiempo'>.006946</span> <br /> <img src="instancias/small10.tsp.3.png" /></td>
+            </tr>
+            <tr>
+               <td>berlin52</td>
+               <td><span class='coste'>8182.19</span> <span class='tiempo'>.010284</span> <br /> <img src="instancias/berlin52.tsp.1.png" /></td>
+               <td><span class='coste'>9724.34</span> <span class='tiempo'>.027486</span> <br /> <img src="instancias/berlin52.tsp.2.png" /></td>
+               <td><span class='coste'>15483.3</span> <span class='tiempo'>.020499</span> <br /> <img src="instancias/berlin52.tsp.3.png" /></td>
+            </tr>
+            <tr>
+               <td>eil101</td>
+               <td><span class='coste'>736.368</span> <span class='tiempo'>.017552</span> <br /> <img src="instancias/eil101.tsp.1.png" /></td>
+               <td><span class='coste'>761.294</span> <span class='tiempo'>.168332</span> <br /> <img src="instancias/eil101.tsp.2.png" /></td>
+               <td><span class='coste'>1876.92</span> <span class='tiempo'>.046158</span> <br /> <img src="instancias/eil101.tsp.3.png" /></td>
+            </tr>
+            <tr>
+               <td>KROA200</td>
+               <td><span class='coste'>34547.7</span> <span class='tiempo'>.083469</span> <br /> <img src="instancias/KROA200.tsp.1.png" /></td>
+               <td><span class='coste'>35213.7</span> <span class='tiempo'>1.94008</span> <br /> <img src="instancias/KROA200.tsp.2.png" /></td>
+               <td><span class='coste'>214857</span> <span class='tiempo'>.143186</span> <br /> <img src="instancias/KROA200.tsp.3.png" /></td>
+            </tr>
+            <tr>
+               <td>a280</td>
+               <td><span class='coste'>3094.28</span> <span class='tiempo'>.180689</span> <br /> <img src="instancias/a280.tsp.1.png" /></td>
+               <td><span class='coste'>3166.81</span> <span class='tiempo'>6.84771</span> <br /> <img src="instancias/a280.tsp.2.png" /></td>
+               <td><span class='coste'>2818.62</span> <span class='tiempo'>.245479</span> <br /> <img src="instancias/a280.tsp.3.png" /></td>
+            </tr>
+            <tr>
+               <td>pr1002</td>
+               <td><span class='coste'>312237</span> <span class='tiempo'>7.89942</span> <br /> <img src="instancias/pr1002.tsp.1.png" /></td>
+               <td><span class='coste'>294606</span> <span class='tiempo'>964.007</span> <br /> <img src="instancias/pr1002.tsp.2.png" /></td>
+               <td><span class='coste'>349438</span> <span class='tiempo'>2.57201</span> <br /> <img src="instancias/pr1002.tsp.3.png" /></td>
+            </tr>
+      </article>
+   </body>
+</html>
